@@ -1,0 +1,99 @@
+/* Pretty Mermaid Plugin Styles */
+
+/* Base enhancements for all Mermaid diagrams */
+.pretty-mermaid-enhanced {
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  background: var(--background-secondary);
+}
+
+.pretty-mermaid-enhanced:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Fix common sizing issues */
+.pretty-mermaid-enhanced svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Classic Theme */
+.pretty-mermaid-enhanced.pretty-mermaid-classic {
+  border: 2px solid var(--background-modifier-border);
+  background: var(--background-secondary) !important;
+}
+
+.pretty-mermaid-classic .node rect,
+.pretty-mermaid-classic .node circle,
+.pretty-mermaid-classic .node ellipse,
+.pretty-mermaid-classic .node polygon {
+  fill: var(--color-accent) !important;
+  stroke: var(--color-accent-2) !important;
+  stroke-width: 2px !important;
+}
+
+.pretty-mermaid-classic .edgeLabel {
+  background: var(--background-primary) !important;
+  color: var(--text-normal) !important;
+}
+
+/* Professional Theme */
+.pretty-mermaid-enhanced.pretty-mermaid-professional {
+  border: 1px solid #d1d5db;
+  background: #f9fafb !important;
+}
+
+.pretty-mermaid-professional .node rect,
+.pretty-mermaid-professional .node circle,
+.pretty-mermaid-professional .node ellipse,
+.pretty-mermaid-professional .node polygon {
+  fill: #ffffff !important;
+  stroke: #6b7280 !important;
+  stroke-width: 1px !important;
+}
+
+.pretty-mermaid-professional .node .label {
+  color: #374151 !important;
+}
+
+.pretty-mermaid-professional .edgePath .path {
+  stroke: #9ca3af !important;
+  stroke-width: 1px !important;
+}
+
+.pretty-mermaid-professional .edgeLabel {
+  background: #ffffff !important;
+  color: #6b7280 !important;
+}
+
+/* Dark theme adjustments for Professional theme */
+.theme-dark .pretty-mermaid-professional {
+  background: #1f2937 !important;
+  border-color: #374151;
+}
+
+.theme-dark .pretty-mermaid-professional .node rect,
+.theme-dark .pretty-mermaid-professional .node circle,
+.theme-dark .pretty-mermaid-professional .node ellipse,
+.theme-dark .pretty-mermaid-professional .node polygon {
+  fill: #374151 !important;
+  stroke: #6b7280 !important;
+}
+
+.theme-dark .pretty-mermaid-professional .node .label {
+  color: #f3f4f6 !important;
+}
+
+.theme-dark .pretty-mermaid-professional .edgePath .path {
+  stroke: #9ca3af !important;
+}
+
+.theme-dark .pretty-mermaid-professional .edgeLabel {
+  background: #374151 !important;
+  color: #d1d5db !important;
+}

@@ -1,0 +1,30 @@
+{
+	"name": "pretty-mermaid",
+	"version": "0.1.0",
+	"description": "Pretty Mermaid - Make your Mermaid diagrams actually pretty. Enhances Obsidian's default Mermaid rendering with better styling, colors, and smooth appearance.",
+	"main": "main.js",
+	"scripts": {
+		"dev": "node esbuild.config.mjs",
+		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
+		"version": "node version-bump.mjs && git add manifest.json versions.json",
+		"test:visual": "playwright test --grep visual",
+		"test:functional": "playwright test --grep functional",
+		"test:all": "playwright test",
+		"test:update": "playwright test --update-snapshots",
+		"test:ci": "playwright test --reporter=github"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "MIT",
+	"devDependencies": {
+		"@playwright/test": "^1.54.1",
+		"@types/node": "^16.11.6",
+		"@typescript-eslint/eslint-plugin": "5.29.0",
+		"@typescript-eslint/parser": "5.29.0",
+		"builtin-modules": "3.3.0",
+		"esbuild": "0.17.3",
+		"obsidian": "latest",
+		"tslib": "2.4.0",
+		"typescript": "4.7.4"
+	}
+}
