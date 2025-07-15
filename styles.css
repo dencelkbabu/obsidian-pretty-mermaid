@@ -22,24 +22,48 @@
   margin: 0 auto;
 }
 
-/* Classic Theme */
+/* Classic Theme - Official Mermaid Colors */
 .pretty-mermaid-enhanced.pretty-mermaid-classic {
-  border: 2px solid var(--background-modifier-border);
-  background: var(--background-secondary) !important;
+  border: 2px solid #9370DB;
+  background: white !important;
+  font-family: "trebuchet ms", verdana, arial, sans-serif;
+  font-size: 16px;
 }
 
 .pretty-mermaid-classic .node rect,
 .pretty-mermaid-classic .node circle,
 .pretty-mermaid-classic .node ellipse,
 .pretty-mermaid-classic .node polygon {
-  fill: var(--color-accent) !important;
-  stroke: var(--color-accent-2) !important;
+  fill: #ECECFF !important;
+  stroke: #9370DB !important;
+  stroke-width: 2px !important;
+}
+
+.pretty-mermaid-classic .node .label {
+  color: #333 !important;
+  font-family: "trebuchet ms", verdana, arial, sans-serif !important;
+  font-size: 16px !important;
+}
+
+.pretty-mermaid-classic .edgePath .path {
+  stroke: #333333 !important;
   stroke-width: 2px !important;
 }
 
 .pretty-mermaid-classic .edgeLabel {
-  background: var(--background-primary) !important;
-  color: var(--text-normal) !important;
+  background: rgba(232, 232, 232, 0.8) !important;
+  color: #333 !important;
+  font-family: "trebuchet ms", verdana, arial, sans-serif !important;
+  border-radius: 4px !important;
+}
+
+/* Secondary nodes (like decision diamonds) */
+.pretty-mermaid-classic .node:nth-child(even) rect,
+.pretty-mermaid-classic .node:nth-child(even) circle,
+.pretty-mermaid-classic .node:nth-child(even) ellipse,
+.pretty-mermaid-classic .node:nth-child(even) polygon {
+  fill: #ffffde !important;
+  stroke: #aaaa33 !important;
 }
 
 /* Professional Theme */
