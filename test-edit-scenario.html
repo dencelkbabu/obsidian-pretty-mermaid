@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pretty Mermaid Edit Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin-bottom: 40px; }
+        .mermaid { border: 1px solid #ccc; margin: 20px 0; }
+        button { margin: 10px 0; padding: 10px 20px; }
+    </style>
+</head>
+<body>
+    <h1>Pretty Mermaid Edit Scenario Test</h1>
+    
+    <div class="test-section">
+        <h2>Test: Simulate Edit -> Re-render cycle</h2>
+        <button onclick="simulateEdit()">Simulate "Edit Block" -> Re-render</button>
+        <div id="diagram-container">
+            <div class="mermaid">
+graph TB
+    subgraph "Frontend"
+        A[React App]
+        B[State Management]
+    end
+    
+    subgraph "Backend"
+        C[API Gateway]
+        D[Authentication]
+    end
+    
+    A --> C
+    B --> A
+            </div>
+        </div>
+    </div>
+
+    <div id="log"></div>
+
+    <script>
+        let mutationObserver = null;
+        let settings = { enabled: true, theme: 'monochrome' };
+        
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            logDiv.innerHTML += '<div>' + new Date().toLocaleTimeString() + ': ' + message + '</div>';
+        }
+        
+        function processMermaidDiagrams(element) {
+            const mermaidElements = element.querySelectorAll('.mermaid');
+            mermaidElements.forEach(el => {
+                if (!el.classList.contains('pretty-mermaid-enhanced')) {
+                    el.classList.add('pretty-mermaid-enhanced');
+                    el.classList.add(`pretty-mermaid-${settings.theme}`);
+                    log(`Applied plugin classes to diagram: ${el.classList.toString()}`);
+                }
+            });
+        }
+        
+        function setupMutationObserver() {
+            mutationObserver = new MutationObserver((mutations) => {
+                if (!settings.enabled) return;
+                
+                let shouldProcess = false;
+                
+                mutations.forEach((mutation) => {
+                    if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                        mutation.addedNodes.forEach((node) => {
+                            if (node.nodeType === Node.ELEMENT_NODE) {
+                                const element = node;
+                                
+                                if (element.classList.contains('mermaid')) {
+                                    shouldProcess = true;
+                                    log('Detected new mermaid element added to DOM');
+                                }
+                                
+                                if (element.querySelectorAll && element.querySelectorAll('.mermaid').length > 0) {
+                                    shouldProcess = true;
+                                    log('Detected element containing mermaid diagrams');
+                                }
+                            }
+                        });
+                    }
+                });
+                
+                if (shouldProcess) {
+                    log('Processing new diagrams...');
+                    setTimeout(() => {
+                        processMermaidDiagrams(document.body);
+                    }, 100);
+                }
+            });
+            
+            mutationObserver.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+            
+            log('Mutation observer set up');
+        }
+        
+        function simulateEdit() {
+            log('--- Simulating edit cycle ---');
+            
+            // Step 1: Remove old diagram (simulates edit mode)
+            const container = document.getElementById('diagram-container');
+            const oldDiagram = container.querySelector('.mermaid');
+            if (oldDiagram) {
+                oldDiagram.remove();
+                log('Removed old diagram');
+            }
+            
+            // Step 2: Add new diagram (simulates re-render after edit)
+            setTimeout(() => {
+                const newDiagram = document.createElement('div');
+                newDiagram.className = 'mermaid';
+                newDiagram.textContent = `graph TB
+    subgraph "Frontend"
+        A[React App - Updated]
+        B[State Management]
+    end
+    
+    subgraph "Backend"
+        C[API Gateway]
+        D[Authentication]
+    end
+    
+    A --> C
+    B --> A`;
+                
+                container.appendChild(newDiagram);
+                log('Added new diagram to DOM');
+                
+                // Re-initialize mermaid on the new element
+                mermaid.init(undefined, newDiagram);
+                log('Re-initialized mermaid on new element');
+            }, 500);
+        }
+        
+        // Initialize
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default'
+        });
+        
+        // Apply theme CSS
+        const css = `
+            .pretty-mermaid-monochrome {
+                --mermaid-cluster-bkg: #f3f4f6;
+                --mermaid-cluster-border: #6b7280;
+                --mermaid-primary-color: #ffffff;
+                --mermaid-primary-border-color: #6b7280;
+                --mermaid-line-color: #9ca3af;
+                
+                border-radius: 8px;
+                padding: 16px;
+                margin: 16px 0;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                background: #f9fafb !important;
+                border: 1px solid #d1d5db;
+            }
+            
+            .pretty-mermaid-monochrome svg {
+                max-width: 100%;
+                height: auto;
+                display: block;
+                margin: 0 auto;
+            }
+            
+            .pretty-mermaid-monochrome .cluster rect {
+                fill: var(--mermaid-cluster-bkg) !important;
+                stroke: var(--mermaid-cluster-border) !important;
+                stroke-width: 2px !important;
+            }
+            
+            .pretty-mermaid-monochrome .node rect,
+            .pretty-mermaid-monochrome .node circle,
+            .pretty-mermaid-monochrome .node ellipse,
+            .pretty-mermaid-monochrome .node polygon {
+                fill: var(--mermaid-primary-color) !important;
+                stroke: var(--mermaid-primary-border-color) !important;
+                stroke-width: 1px !important;
+            }
+            
+            .pretty-mermaid-monochrome .edgePath .path {
+                stroke: var(--mermaid-line-color) !important;
+                stroke-width: 1px !important;
+            }
+        `;
+        
+        const styleElement = document.createElement('style');
+        styleElement.textContent = css;
+        document.head.appendChild(styleElement);
+        
+        // Set up after page loads
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                log('Page loaded, applying initial styling...');
+                processMermaidDiagrams(document.body);
+                setupMutationObserver();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

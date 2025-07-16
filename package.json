@@ -1,6 +1,6 @@
 {
 	"name": "pretty-mermaid",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"description": "Pretty Mermaid - Make your Mermaid diagrams actually pretty. Enhances Obsidian's default Mermaid rendering with better styling, colors, and smooth appearance.",
 	"main": "main.js",
 	"scripts": {
@@ -11,7 +11,8 @@
 		"test:functional": "playwright test --grep functional",
 		"test:all": "playwright test",
 		"test:update": "playwright test --update-snapshots",
-		"test:ci": "playwright test --reporter=github"
+		"test:ci": "playwright test --reporter=github",
+		"test:server": "node test-server.js"
 	},
 	"keywords": [],
 	"author": "",

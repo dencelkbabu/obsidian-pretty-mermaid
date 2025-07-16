@@ -2,76 +2,128 @@
 
 Pretty Mermaid 🧜‍♀️ - Make your Mermaid diagrams actually pretty. Enhances Obsidian's default Mermaid rendering with better styling, colors, and smooth appearance. Because life's too short for ugly flowcharts.
 
-## Features
+![Pretty Mermaid Plugin](https://img.shields.io/badge/version-1.0.0-blue.svg) ![Obsidian Plugin](https://img.shields.io/badge/Obsidian-Plugin-purple.svg) ![MIT License](https://img.shields.io/badge/license-MIT-green.svg)
 
-- **Enhanced Styling**: Improved color schemes and typography for better readability
-- **Multiple Themes**: Choose from Default, Professional, Colorful, or Minimal themes
-- **Smart Sizing**: Fixes common cropping and sizing issues with Mermaid diagrams
-- **Smooth Transitions**: Adds subtle animations and transitions for a polished look
-- **Custom CSS Support**: Advanced users can add their own styling
+## 🌟 Features
 
-## Installation
+- **🎨 Two Beautiful Themes**: 
+  - **Classic**: Official Mermaid colors with lavender and yellow nodes
+  - **Monochrome**: Clean monochrome styling for business presentations
+- **📱 Responsive Design**: Makes Mermaid diagrams fully responsive (unlike the default static sizing)
+- **✨ Enhanced Styling**: Improved typography with authentic Trebuchet MS font
+- **🔧 Smart Sizing**: Fixes common cropping and sizing issues with Mermaid diagrams  
+- **🚀 Instant Application**: Works automatically on all existing Mermaid diagrams
+- **⚙️ Simple Settings**: Easy theme switching with immediate preview
+- **🎯 Zero Configuration**: Works perfectly out of the box
+
+## 📸 Screenshots
+
+*See `SHOWCASE.md` for complete examples with both themes!*
+
+## 🚀 Installation
+
+### From Obsidian Community Plugins (Recommended)
+1. Open Obsidian Settings
+2. Go to Community Plugins
+3. Search for "Pretty Mermaid"
+4. Install and enable the plugin
 
 ### Manual Installation
 1. Download the latest release files (`main.js`, `manifest.json`, `styles.css`)
 2. Copy them to your vault's `.obsidian/plugins/pretty-mermaid/` folder
 3. Enable the plugin in Obsidian's Community Plugins settings
 
-### Development Installation
-1. Clone this repository into your vault's `.obsidian/plugins/` folder
-2. Install dependencies: `npm install`
-3. Build the plugin: `npm run build`
-4. Enable the plugin in Obsidian's settings
+## 🎯 Usage
 
-## Usage
+1. **Install & Enable**: The plugin works immediately after installation
+2. **Choose Your Theme**: Go to Settings → Pretty Mermaid and select:
+   - **Classic**: Official Mermaid styling with beautiful colors
+   - **Monochrome**: Clean monochrome for business use
+3. **Enjoy Beautiful Diagrams**: All your Mermaid diagrams are instantly enhanced!
 
-1. Enable Pretty Mermaid in your plugin settings
-2. Choose your preferred theme from the dropdown
-3. Your existing Mermaid diagrams will automatically be enhanced!
+### Example
 
-## Development
+Before Pretty Mermaid:
+- Basic gray boxes with default fonts
+- Poor contrast and readability
+- Inconsistent styling
+- **Static sizing that doesn't adapt to different screen sizes**
 
-This plugin uses the official Obsidian plugin template and follows modern TypeScript practices.
+After Pretty Mermaid:
+- Beautiful color schemes with proper contrast
+- Professional typography with Trebuchet MS
+- Consistent, polished appearance
+- **Fully responsive diagrams that scale perfectly on any device**
 
-### Setup
+## 🎨 Themes
+
+### Classic Theme
+- **Colors**: Official Mermaid lavender (#ECECFF) and yellow (#ffffde) nodes
+- **Borders**: Elegant orchid (#9370DB) and olive (#aaaa33) accents
+- **Style**: Authentic Mermaid appearance with enhanced readability
+
+### Monochrome Theme  
+- **Colors**: Clean monochrome with white and gray tones
+- **Style**: Perfect for business presentations and professional documentation
+- **Focus**: Maximum readability and minimal distraction
+
+## 🛠️ Development
+
+This plugin is built with modern TypeScript and follows Obsidian best practices.
+
+### Quick Start
 ```bash
-# Install dependencies
+# Clone and setup
+git clone https://github.com/calvinku/pretty-mermaid.git
+cd pretty-mermaid
 npm install
 
-# Start development with hot reload
+# Development with hot reload
 npm run dev
 
-# Build for production
+# Build for production  
 npm run build
 ```
 
 ### Testing
-We use Playwright for automated testing and visual regression testing.
+We use Playwright for automated visual regression testing:
 
 ```bash
-# Install Playwright
+# Install test dependencies
 npm install -D @playwright/test
 npx playwright install
 
 # Run tests
-npm run test:visual
-npm run test:functional
+npm run test:all
 ```
 
-See `DEVELOPMENT_PLAN.md` for our complete development roadmap.
+## 🤝 Contributing
 
-## Contributing
+We welcome contributions! Please see our development roadmap in `DEVELOPMENT_PLAN.md`.
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new features
-5. Submit a pull request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes and add tests
+4. Commit your changes (`git commit -m 'Add amazing feature'`)
+5. Push to the branch (`git push origin feature/amazing-feature`)
+6. Open a Pull Request
 
-## License
+## 📝 License
 
-MIT License - see LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Support
+## 🙏 Acknowledgments
 
-If you encounter any issues or have feature requests, please create an issue on our GitHub repository.
+- Built for the amazing [Obsidian](https://obsidian.md) community
+- Uses official [Mermaid.js](https://mermaid.js.org) color schemes
+- Created by [Calvin Ku](https://github.com/calvinku) & [Claude](https://claude.ai)
+
+## 📞 Support
+
+- **Issues**: [GitHub Issues](https://github.com/calvinku/pretty-mermaid/issues)
+- **Features**: [Feature Requests](https://github.com/calvinku/pretty-mermaid/issues/new)
+- **Discussions**: [GitHub Discussions](https://github.com/calvinku/pretty-mermaid/discussions)
+
+---
+
+*Transform your Mermaid diagrams from functional to fantastic! ✨*
