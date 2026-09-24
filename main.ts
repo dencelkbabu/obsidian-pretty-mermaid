@@ -14,6 +14,42 @@ const DEFAULT_SETTINGS: PrettyMermaidSettings = {
 	customCss: ''
 }
 
+interface ThemePalette {
+	primaryColor: string;
+	primaryTextColor: string;
+	primaryBorderColor: string;
+	lineColor: string;
+	sectionBkgColor: string;
+	altSectionBkgColor: string;
+	gridColor: string;
+	secondaryColor: string;
+	tertiaryColor: string;
+	background: string;
+	mainBkg: string;
+	secondBkg: string;
+	tertiaryBkg: string;
+	clusterBkg: string;
+	clusterBorder: string;
+	clusterTextColor: string;
+	defaultLinkColor: string;
+	titleColor: string;
+	edgeLabelBackground: string;
+	actorBorder: string;
+	actorBkg: string;
+	actorTextColor: string;
+	actorLineColor: string;
+	signalColor: string;
+	signalTextColor: string;
+	c0: string;
+	c1: string;
+	c2: string;
+	c3: string;
+	c4: string;
+	c5: string;
+	c6: string;
+	c7: string;
+}
+
 export default class PrettyMermaidPlugin extends Plugin {
 	settings: PrettyMermaidSettings;
 	private mutationObserver: MutationObserver | null = null;
@@ -135,11 +171,7 @@ export default class PrettyMermaidPlugin extends Plugin {
 	}
 
 	private applyMermaidTheme() {
-		// Get the theme variables based on current theme
-		const themeVars = this.getMermaidThemeVariables();
-		
-		// Create or update a style element for this diagram
-		const styleId = `pretty-mermaid-theme-${this.settings.theme}`;
+		const styleId = 'pretty-mermaid-theme-dynamic';
 		let styleElement = document.getElementById(styleId);
 		
 		if (!styleElement) {
@@ -148,13 +180,52 @@ export default class PrettyMermaidPlugin extends Plugin {
 			document.head.appendChild(styleElement);
 		}
 		
-		// Generate CSS with theme variables
-		const css = this.generateThemeCss(themeVars);
+		let css = this.generateAllThemesCss();
+		if (this.settings.customCss && this.settings.customCss.trim().length > 0) {
+			css += `\n/* Custom User CSS */\n${this.settings.customCss}\n`;
+		}
 		styleElement.textContent = css;
 	}
 
-	private getMermaidThemeVariables() {
-		if (this.settings.theme === 'classic') {
+	private getThemePalette(themeName: 'classic' | 'monochrome', isDark: boolean): ThemePalette {
+		if (themeName === 'classic') {
+			if (isDark) {
+				return {
+					primaryColor: '#2d224e',
+					primaryTextColor: '#f8fafc',
+					primaryBorderColor: '#a78bfa',
+					lineColor: '#cbd5e1',
+					sectionBkgColor: '#3b2f15',
+					altSectionBkgColor: '#3b2f15',
+					gridColor: '#334155',
+					secondaryColor: '#3b2f15',
+					tertiaryColor: '#1e1a30',
+					background: '#181528',
+					mainBkg: '#2d224e',
+					secondBkg: '#3b2f15',
+					tertiaryBkg: '#1e1a30',
+					clusterBkg: '#221d26',
+					clusterBorder: '#d97706',
+					clusterTextColor: '#fde68a',
+					defaultLinkColor: '#cbd5e1',
+					titleColor: '#fde68a',
+					edgeLabelBackground: '#1e1a30',
+					actorBorder: '#a78bfa',
+					actorBkg: '#2d224e',
+					actorTextColor: '#f8fafc',
+					actorLineColor: '#94a3b8',
+					signalColor: '#cbd5e1',
+					signalTextColor: '#f8fafc',
+					c0: '#2d224e',
+					c1: '#3b2f15',
+					c2: '#1e1a30',
+					c3: '#334155',
+					c4: '#475569',
+					c5: '#64748b',
+					c6: '#94a3b8',
+					c7: '#cbd5e1'
+				};
+			}
 			return {
 				primaryColor: '#ECECFF',
 				primaryTextColor: '#333333',
@@ -171,6 +242,7 @@ export default class PrettyMermaidPlugin extends Plugin {
 				tertiaryBkg: '#f9f9f9',
 				clusterBkg: '#ffffde',
 				clusterBorder: '#aaaa33',
+				clusterTextColor: '#333333',
 				defaultLinkColor: '#333333',
 				titleColor: '#333333',
 				edgeLabelBackground: '#e8e8e8',
@@ -189,130 +261,232 @@ export default class PrettyMermaidPlugin extends Plugin {
 				c6: '#999999',
 				c7: '#808080'
 			};
-		} else {
-			// Monochrome theme
+		}
+
+		// Monochrome theme
+		if (isDark) {
 			return {
-				primaryColor: '#ffffff',
-				primaryTextColor: '#374151',
-				primaryBorderColor: '#6b7280',
-				lineColor: '#9ca3af',
-				sectionBkgColor: '#f3f4f6',
-				altSectionBkgColor: '#f3f4f6',
-				gridColor: '#e5e7eb',
-				secondaryColor: '#f3f4f6',
-				tertiaryColor: '#f9fafb',
-				background: '#f9fafb',
-				mainBkg: '#ffffff',
-				secondBkg: '#f3f4f6',
-				tertiaryBkg: '#f9fafb',
-				clusterBkg: '#f3f4f6',
-				clusterBorder: '#6b7280',
-				defaultLinkColor: '#9ca3af',
-				titleColor: '#374151',
-				edgeLabelBackground: '#ffffff',
-				actorBorder: '#6b7280',
-				actorBkg: '#ffffff',
-				actorTextColor: '#374151',
-				actorLineColor: '#9ca3af',
-				signalColor: '#9ca3af',
-				signalTextColor: '#374151',
-				c0: '#ffffff',
-				c1: '#f3f4f6',
-				c2: '#f9fafb',
-				c3: '#e5e7eb',
-				c4: '#d1d5db',
-				c5: '#9ca3af',
-				c6: '#6b7280',
-				c7: '#374151'
+				primaryColor: '#1f2937',
+				primaryTextColor: '#f3f4f6',
+				primaryBorderColor: '#64748b',
+				lineColor: '#94a3b8',
+				sectionBkgColor: '#111827',
+				altSectionBkgColor: '#111827',
+				gridColor: '#374151',
+				secondaryColor: '#111827',
+				tertiaryColor: '#1f2937',
+				background: '#111827',
+				mainBkg: '#1f2937',
+				secondBkg: '#111827',
+				tertiaryBkg: '#1f2937',
+				clusterBkg: '#1e293b',
+				clusterBorder: '#64748b',
+				clusterTextColor: '#f3f4f6',
+				defaultLinkColor: '#94a3b8',
+				titleColor: '#f9fafb',
+				edgeLabelBackground: '#1f2937',
+				actorBorder: '#64748b',
+				actorBkg: '#1f2937',
+				actorTextColor: '#f3f4f6',
+				actorLineColor: '#94a3b8',
+				signalColor: '#94a3b8',
+				signalTextColor: '#f3f4f6',
+				c0: '#1f2937',
+				c1: '#111827',
+				c2: '#1e293b',
+				c3: '#374151',
+				c4: '#4b5563',
+				c5: '#6b7280',
+				c6: '#94a3b8',
+				c7: '#f3f4f6'
 			};
 		}
+		return {
+			primaryColor: '#ffffff',
+			primaryTextColor: '#374151',
+			primaryBorderColor: '#6b7280',
+			lineColor: '#9ca3af',
+			sectionBkgColor: '#f3f4f6',
+			altSectionBkgColor: '#f3f4f6',
+			gridColor: '#e5e7eb',
+			secondaryColor: '#f3f4f6',
+			tertiaryColor: '#f9fafb',
+			background: '#f9fafb',
+			mainBkg: '#ffffff',
+			secondBkg: '#f3f4f6',
+			tertiaryBkg: '#f9fafb',
+			clusterBkg: '#f3f4f6',
+			clusterBorder: '#6b7280',
+			clusterTextColor: '#374151',
+			defaultLinkColor: '#9ca3af',
+			titleColor: '#374151',
+			edgeLabelBackground: '#ffffff',
+			actorBorder: '#6b7280',
+			actorBkg: '#ffffff',
+			actorTextColor: '#374151',
+			actorLineColor: '#9ca3af',
+			signalColor: '#9ca3af',
+			signalTextColor: '#374151',
+			c0: '#ffffff',
+			c1: '#f3f4f6',
+			c2: '#f9fafb',
+			c3: '#e5e7eb',
+			c4: '#d1d5db',
+			c5: '#9ca3af',
+			c6: '#6b7280',
+			c7: '#374151'
+		};
 	}
 
-	private generateThemeCss(themeVars: any): string {
-		const className = `pretty-mermaid-${this.settings.theme}`;
-		
+	private generateVariablesCss(selector: string, vars: ThemePalette): string {
 		return `
-			.${className} {
-				--mermaid-primary-color: ${themeVars.primaryColor};
-				--mermaid-primary-text-color: ${themeVars.primaryTextColor};
-				--mermaid-primary-border-color: ${themeVars.primaryBorderColor};
-				--mermaid-line-color: ${themeVars.lineColor};
-				--mermaid-section-bkg-color: ${themeVars.sectionBkgColor};
-				--mermaid-alt-section-bkg-color: ${themeVars.altSectionBkgColor};
-				--mermaid-grid-color: ${themeVars.gridColor};
-				--mermaid-secondary-color: ${themeVars.secondaryColor};
-				--mermaid-tertiary-color: ${themeVars.tertiaryColor};
-				--mermaid-background: ${themeVars.background};
-				--mermaid-main-bkg: ${themeVars.mainBkg};
-				--mermaid-second-bkg: ${themeVars.secondBkg};
-				--mermaid-tertiary-bkg: ${themeVars.tertiaryBkg};
-				--mermaid-cluster-bkg: ${themeVars.clusterBkg};
-				--mermaid-cluster-border: ${themeVars.clusterBorder};
-				--mermaid-default-link-color: ${themeVars.defaultLinkColor};
-				--mermaid-title-color: ${themeVars.titleColor};
-				--mermaid-edge-label-background: ${themeVars.edgeLabelBackground};
-				--mermaid-actor-border: ${themeVars.actorBorder};
-				--mermaid-actor-bkg: ${themeVars.actorBkg};
-				--mermaid-actor-text-color: ${themeVars.actorTextColor};
-				--mermaid-actor-line-color: ${themeVars.actorLineColor};
-				--mermaid-signal-color: ${themeVars.signalColor};
-				--mermaid-signal-text-color: ${themeVars.signalTextColor};
-				--mermaid-c0: ${themeVars.c0};
-				--mermaid-c1: ${themeVars.c1};
-				--mermaid-c2: ${themeVars.c2};
-				--mermaid-c3: ${themeVars.c3};
-				--mermaid-c4: ${themeVars.c4};
-				--mermaid-c5: ${themeVars.c5};
-				--mermaid-c6: ${themeVars.c6};
-				--mermaid-c7: ${themeVars.c7};
-			}
-			
-			/* Apply theme variables to SVG elements */
-			.${className} .cluster rect {
-				fill: var(--mermaid-cluster-bkg) !important;
-				stroke: var(--mermaid-cluster-border) !important;
-				stroke-width: 2px !important;
-			}
-			
-			.${className} .node rect,
-			.${className} .node circle,
-			.${className} .node ellipse,
-			.${className} .node polygon {
-				fill: var(--mermaid-primary-color) !important;
-				stroke: var(--mermaid-primary-border-color) !important;
-				stroke-width: 2px !important;
-			}
-			
-			.${className} .edgePath .path {
-				stroke: var(--mermaid-line-color) !important;
-				stroke-width: 2px !important;
-			}
-			
-			.${className} .edgeLabel {
-				background-color: var(--mermaid-edge-label-background) !important;
-				color: var(--mermaid-primary-text-color) !important;
-			}
-			
-			.${className} .actor {
-				fill: var(--mermaid-actor-bkg) !important;
-				stroke: var(--mermaid-actor-border) !important;
-				stroke-width: 2px !important;
-			}
-			
-			.${className} .actor-line {
-				stroke: var(--mermaid-actor-line-color) !important;
-			}
-			
-			.${className} .messageLine0,
-			.${className} .messageLine1 {
-				stroke: var(--mermaid-signal-color) !important;
-				stroke-width: 2px !important;
-			}
-			
-			.${className} .messageText {
-				fill: var(--mermaid-signal-text-color) !important;
-			}
-		`;
+${selector} {
+  --mermaid-primary-color: ${vars.primaryColor};
+  --mermaid-primary-text-color: ${vars.primaryTextColor};
+  --mermaid-primary-border-color: ${vars.primaryBorderColor};
+  --mermaid-line-color: ${vars.lineColor};
+  --mermaid-section-bkg-color: ${vars.sectionBkgColor};
+  --mermaid-alt-section-bkg-color: ${vars.altSectionBkgColor};
+  --mermaid-grid-color: ${vars.gridColor};
+  --mermaid-secondary-color: ${vars.secondaryColor};
+  --mermaid-tertiary-color: ${vars.tertiaryColor};
+  --mermaid-background: ${vars.background};
+  --mermaid-main-bkg: ${vars.mainBkg};
+  --mermaid-second-bkg: ${vars.secondBkg};
+  --mermaid-tertiary-bkg: ${vars.tertiaryBkg};
+  --mermaid-cluster-bkg: ${vars.clusterBkg};
+  --mermaid-cluster-border: ${vars.clusterBorder};
+  --mermaid-cluster-text-color: ${vars.clusterTextColor};
+  --mermaid-default-link-color: ${vars.defaultLinkColor};
+  --mermaid-title-color: ${vars.titleColor};
+  --mermaid-edge-label-background: ${vars.edgeLabelBackground};
+  --mermaid-actor-border: ${vars.actorBorder};
+  --mermaid-actor-bkg: ${vars.actorBkg};
+  --mermaid-actor-text-color: ${vars.actorTextColor};
+  --mermaid-actor-line-color: ${vars.actorLineColor};
+  --mermaid-signal-color: ${vars.signalColor};
+  --mermaid-signal-text-color: ${vars.signalTextColor};
+  --mermaid-c0: ${vars.c0};
+  --mermaid-c1: ${vars.c1};
+  --mermaid-c2: ${vars.c2};
+  --mermaid-c3: ${vars.c3};
+  --mermaid-c4: ${vars.c4};
+  --mermaid-c5: ${vars.c5};
+  --mermaid-c6: ${vars.c6};
+  --mermaid-c7: ${vars.c7};
+}`;
+	}
+
+	private generateAllThemesCss(): string {
+		const themes: Array<'classic' | 'monochrome'> = ['classic', 'monochrome'];
+		let css = '';
+
+		for (const t of themes) {
+			const lightVars = this.getThemePalette(t, false);
+			const darkVars = this.getThemePalette(t, true);
+
+			// Base default (light)
+			css += this.generateVariablesCss(`.pretty-mermaid-${t}`, lightVars);
+
+			// Light mode overrides
+			css += this.generateVariablesCss(
+				`.theme-light .pretty-mermaid-${t}, .pretty-mermaid-mode-light.pretty-mermaid-${t}, body:not(.theme-dark):not(.pretty-mermaid-mode-dark) .pretty-mermaid-${t}:not(.pretty-mermaid-mode-dark)`,
+				lightVars
+			);
+
+			// Dark mode overrides (Obsidian dark theme or forced dark mode)
+			css += this.generateVariablesCss(
+				`.theme-dark .pretty-mermaid-${t}:not(.pretty-mermaid-mode-light), .pretty-mermaid-mode-dark.pretty-mermaid-${t}`,
+				darkVars
+			);
+
+			// Dynamic variable mappings to SVG and HTML elements
+			css += `
+.pretty-mermaid-${t} .cluster rect,
+.pretty-mermaid-${t} g.cluster rect {
+  fill: var(--mermaid-cluster-bkg) !important;
+  stroke: var(--mermaid-cluster-border) !important;
+  stroke-width: 2px !important;
+}
+
+.pretty-mermaid-${t} .cluster .cluster-label,
+.pretty-mermaid-${t} .cluster .nodeLabel,
+.pretty-mermaid-${t} .cluster span,
+.pretty-mermaid-${t} .cluster div,
+.pretty-mermaid-${t} .cluster text,
+.pretty-mermaid-${t} .cluster tspan {
+  color: var(--mermaid-cluster-text-color) !important;
+  fill: var(--mermaid-cluster-text-color) !important;
+}
+
+.pretty-mermaid-${t} .node rect,
+.pretty-mermaid-${t} .node circle,
+.pretty-mermaid-${t} .node ellipse,
+.pretty-mermaid-${t} .node polygon,
+.pretty-mermaid-${t} .node path {
+  fill: var(--mermaid-primary-color) !important;
+  stroke: var(--mermaid-primary-border-color) !important;
+  stroke-width: 2px !important;
+}
+
+.pretty-mermaid-${t} .node .label,
+.pretty-mermaid-${t} .node .nodeLabel,
+.pretty-mermaid-${t} .node span,
+.pretty-mermaid-${t} .node div,
+.pretty-mermaid-${t} .node text,
+.pretty-mermaid-${t} .node tspan {
+  color: var(--mermaid-primary-text-color) !important;
+  fill: var(--mermaid-primary-text-color) !important;
+}
+
+.pretty-mermaid-${t} .edgePath .path,
+.pretty-mermaid-${t} .flowchart-link {
+  stroke: var(--mermaid-line-color) !important;
+  stroke-width: 2px !important;
+}
+
+.pretty-mermaid-${t} .marker,
+.pretty-mermaid-${t} marker path {
+  fill: var(--mermaid-line-color) !important;
+  stroke: var(--mermaid-line-color) !important;
+}
+
+.pretty-mermaid-${t} .edgeLabel {
+  background-color: var(--mermaid-edge-label-background) !important;
+  color: var(--mermaid-primary-text-color) !important;
+}
+
+.pretty-mermaid-${t} .edgeLabel span,
+.pretty-mermaid-${t} .edgeLabel text {
+  color: var(--mermaid-primary-text-color) !important;
+  fill: var(--mermaid-primary-text-color) !important;
+}
+
+.pretty-mermaid-${t} .actor {
+  fill: var(--mermaid-actor-bkg) !important;
+  stroke: var(--mermaid-actor-border) !important;
+  stroke-width: 2px !important;
+}
+
+.pretty-mermaid-${t} .actor-line {
+  stroke: var(--mermaid-actor-line-color) !important;
+}
+
+.pretty-mermaid-${t} .messageLine0,
+.pretty-mermaid-${t} .messageLine1 {
+  stroke: var(--mermaid-signal-color) !important;
+  stroke-width: 2px !important;
+}
+
+.pretty-mermaid-${t} .messageText,
+.pretty-mermaid-${t} .loopText {
+  fill: var(--mermaid-signal-text-color) !important;
+  color: var(--mermaid-signal-text-color) !important;
+}
+`;
+		}
+
+		return css;
 	}
 
 	private removePrettyMermaidStyles() {
