@@ -1,4 +1,4 @@
-import { App, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { App, Plugin, PluginSettingTab, Setting, loadMermaid } from 'obsidian';
 
 export const AVAILABLE_THEMES = [
 	'adaptive',
@@ -11,11 +11,13 @@ export const AVAILABLE_THEMES = [
 ] as const;
 
 export type MermaidTheme = typeof AVAILABLE_THEMES[number];
+export type FlowchartCurve = 'natural' | 'basis' | 'cardinal' | 'linear' | 'default';
 
 interface PrettyMermaidSettings {
 	enabled: boolean;
 	theme: MermaidTheme;
 	colorMode: 'auto' | 'light' | 'dark';
+	flowchartCurve: FlowchartCurve;
 	customCss: string;
 }
 
@@ -23,6 +25,7 @@ const DEFAULT_SETTINGS: PrettyMermaidSettings = {
 	enabled: true,
 	theme: 'adaptive',
 	colorMode: 'auto',
+	flowchartCurve: 'natural',
 	customCss: ''
 };
 
@@ -68,6 +71,7 @@ export default class PrettyMermaidPlugin extends Plugin {
 
 	async onload() {
 		await this.loadSettings();
+		await this.applyMermaidConfig();
 
 		// Add settings tab
 		this.addSettingTab(new PrettyMermaidSettingTab(this.app, this));
@@ -130,8 +134,26 @@ export default class PrettyMermaidPlugin extends Plugin {
 
 	async saveSettings() {
 		await this.saveData(this.settings);
+		await this.applyMermaidConfig();
 		// Refresh all Mermaid diagrams when settings change
 		this.refreshAllMermaidDiagrams();
+	}
+
+	public async applyMermaidConfig() {
+		try {
+			const mermaid = await loadMermaid();
+			if (mermaid && this.settings.flowchartCurve) {
+				const curve = this.settings.flowchartCurve === 'default' ? 'linear' : this.settings.flowchartCurve;
+				mermaid.initialize({
+					startOnLoad: false,
+					flowchart: {
+						curve: curve
+					}
+				});
+			}
+		} catch (e) {
+			console.log('Pretty Mermaid: Mermaid configuration initialized', e);
+		}
 	}
 
 	public isDarkMode(): boolean {
@@ -1005,6 +1027,21 @@ class PrettyMermaidSettingTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.colorMode || 'auto')
 				.onChange(async (value) => {
 					this.plugin.settings.colorMode = value as PrettyMermaidSettings['colorMode'];
+					await this.plugin.saveSettings();
+				}));
+
+		new Setting(containerEl)
+			.setName('Flowchart Curve Style')
+			.setDesc('Configure connection line curvature (smooth natural bezier curves vs angular or straight)')
+			.addDropdown(dropdown => dropdown
+				.addOption('natural', 'Natural (Smooth Bezier)')
+				.addOption('basis', 'Basis (Organic Curves)')
+				.addOption('cardinal', 'Cardinal (Rounded Corners)')
+				.addOption('linear', 'Linear (Straight Lines)')
+				.addOption('default', 'Default (Standard Mermaid)')
+				.setValue(this.plugin.settings.flowchartCurve || 'natural')
+				.onChange(async (value) => {
+					this.plugin.settings.flowchartCurve = value as FlowchartCurve;
 					await this.plugin.saveSettings();
 				}));
 
