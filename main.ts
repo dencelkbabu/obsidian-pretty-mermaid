@@ -152,12 +152,23 @@ export default class PrettyMermaidPlugin extends Plugin {
 	public async applyMermaidConfig() {
 		try {
 			const mermaid = await loadMermaid();
-			if (mermaid && this.settings.flowchartCurve) {
-				const curve = this.settings.flowchartCurve === 'default' ? 'linear' : this.settings.flowchartCurve;
+			if (mermaid) {
+				const curve = (!this.settings.flowchartCurve || this.settings.flowchartCurve === 'default') ? 'linear' : this.settings.flowchartCurve;
 				mermaid.initialize({
 					startOnLoad: false,
+					theme: 'base',
 					flowchart: {
-						curve: curve
+						curve: curve,
+						padding: 24,
+						nodeSpacing: 50,
+						rankSpacing: 50,
+						htmlLabels: true,
+						useMaxWidth: true
+					},
+					themeVariables: {
+						fontFamily: 'var(--font-interface), var(--font-text), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif',
+						fontSize: '14px',
+						nodePadding: '24px'
 					}
 				});
 			}
@@ -1146,12 +1157,20 @@ ${selector} {
 }
 
 .pretty-mermaid-enhanced .node foreignObject > div {
-  overflow: visible !important;
-  white-space: nowrap !important;
-  padding: 0 4px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  box-sizing: border-box !important;
+  line-height: 1.35 !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .pretty-mermaid-enhanced .node .label {
+  text-align: center !important;
   overflow: visible !important;
 }
 
@@ -1189,15 +1208,25 @@ ${selector} {
 }
 
 .pretty-mermaid-enhanced .edgeLabel span,
-.pretty-mermaid-enhanced .edgeLabel text,
+.pretty-mermaid-enhanced .edgeLabel .label span,
 .pretty-mermaid-enhanced span.edgeLabel {
-  background-color: var(--mermaid-edge-label-background) !important;
-  color: var(--mermaid-primary-text-color) !important;
+  background-color: var(--mermaid-edge-label-background, var(--background-primary)) !important;
+  color: var(--mermaid-primary-text-color, var(--text-normal)) !important;
   border: 1px solid var(--background-modifier-border, rgba(127, 127, 127, 0.25)) !important;
   border-radius: 6px !important;
   padding: 2px 8px !important;
   font-size: 0.82em !important;
+  font-weight: 500 !important;
   display: inline-block !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.pretty-mermaid-enhanced .edgeLabel text,
+.pretty-mermaid-enhanced .edgeLabel tspan {
+  fill: var(--mermaid-primary-text-color, var(--text-normal)) !important;
+  color: var(--mermaid-primary-text-color, var(--text-normal)) !important;
 }
 
 .pretty-mermaid-enhanced .actor {
