@@ -82,6 +82,7 @@ export default class PrettyMermaidPlugin extends Plugin {
 	async onload() {
 		await this.loadSettings();
 		await this.applyMermaidConfig();
+		this.applyMermaidTheme();
 
 		// Add settings tab
 		this.addSettingTab(new PrettyMermaidSettingTab(this.app, this));
@@ -153,6 +154,7 @@ export default class PrettyMermaidPlugin extends Plugin {
 		try {
 			const mermaid = await loadMermaid();
 			if (mermaid) {
+				const isDark = this.isDarkMode();
 				const curve = (!this.settings.flowchartCurve || this.settings.flowchartCurve === 'default') ? 'linear' : this.settings.flowchartCurve;
 				mermaid.initialize({
 					startOnLoad: false,
@@ -169,7 +171,13 @@ export default class PrettyMermaidPlugin extends Plugin {
 						fontFamily: 'var(--font-interface), var(--font-text), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif',
 						fontSize: '14px',
 						nodePadding: '24px',
-						edgeLabelBackground: 'transparent'
+						edgeLabelBackground: 'transparent',
+						darkMode: isDark,
+						textColor: isDark ? '#f8fafc' : '#1e293b',
+						primaryTextColor: isDark ? '#f8fafc' : '#1e293b',
+						secondaryTextColor: isDark ? '#f8fafc' : '#1e293b',
+						tertiaryTextColor: isDark ? '#f8fafc' : '#1e293b',
+						lineColor: isDark ? '#94a3b8' : '#64748b'
 					}
 				});
 			}
@@ -1170,11 +1178,16 @@ ${selector} {
   padding: 0 !important;
 }
 
-.pretty-mermaid-enhanced .node .label {
-  text-align: center !important;
-  overflow: visible !important;
-}
-
+.pretty-mermaid-enhanced text,
+.pretty-mermaid-enhanced tspan,
+.pretty-mermaid-enhanced .nodeLabel,
+.pretty-mermaid-enhanced .label,
+.pretty-mermaid-enhanced .edgeLabel,
+.pretty-mermaid-enhanced .edgeLabel *,
+.pretty-mermaid-enhanced .node foreignObject,
+.pretty-mermaid-enhanced .node foreignObject *,
+.pretty-mermaid-enhanced foreignObject,
+.pretty-mermaid-enhanced foreignObject *,
 .pretty-mermaid-enhanced .node .label,
 .pretty-mermaid-enhanced .node .nodeLabel,
 .pretty-mermaid-enhanced .node span,

@@ -1,10 +1,15 @@
 /* Pretty Mermaid Plugin Styles */
 
 /* ==========================================================================
-   Base Container Styling
+   Base Container Styling & Variable Defaults
    ========================================================================== */
 
 .pretty-mermaid-enhanced {
+  --mermaid-primary-text-color: var(--text-normal, #1e293b);
+  --mermaid-primary-color: var(--background-primary, #ffffff);
+  --mermaid-primary-border-color: var(--background-modifier-border, #e2e8f0);
+  --mermaid-line-color: var(--text-muted, #64748b);
+  --mermaid-edge-label-background: var(--background-primary, #ffffff);
   position: relative;
   border-radius: 12px;
   padding: 24px 20px;
@@ -16,6 +21,15 @@
               box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
               background-color 0.25s ease;
   overflow: hidden;
+}
+
+.theme-dark .pretty-mermaid-enhanced,
+.pretty-mermaid-mode-dark.pretty-mermaid-enhanced {
+  --mermaid-primary-text-color: var(--text-normal, #f8fafc);
+  --mermaid-primary-color: var(--background-primary, #1e1e24);
+  --mermaid-primary-border-color: var(--background-modifier-border, #3a3b44);
+  --mermaid-line-color: var(--text-muted, #94a3b8);
+  --mermaid-edge-label-background: var(--background-secondary, #181528);
 }
 
 .pretty-mermaid-enhanced:hover {
@@ -51,6 +65,21 @@
 .pretty-mermaid-enhanced pre,
 .pretty-mermaid-enhanced .label code {
   font-family: var(--font-monospace), "JetBrains Mono", ui-monospace, monospace !important;
+}
+
+/* Universal Text Color & Fill for Dark/Light Themes */
+.pretty-mermaid-enhanced text,
+.pretty-mermaid-enhanced tspan,
+.pretty-mermaid-enhanced .nodeLabel,
+.pretty-mermaid-enhanced .label,
+.pretty-mermaid-enhanced .edgeLabel,
+.pretty-mermaid-enhanced .edgeLabel *,
+.pretty-mermaid-enhanced .node foreignObject,
+.pretty-mermaid-enhanced .node foreignObject *,
+.pretty-mermaid-enhanced foreignObject,
+.pretty-mermaid-enhanced foreignObject * {
+  color: var(--mermaid-primary-text-color) !important;
+  fill: var(--mermaid-primary-text-color) !important;
 }
 
 /* Node Geometry & Modern Corner Radii */
