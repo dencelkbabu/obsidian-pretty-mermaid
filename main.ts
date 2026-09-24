@@ -252,6 +252,12 @@ export default class PrettyMermaidPlugin extends Plugin {
 		});
 	}
 
+	public getEffectiveIsDark(directives?: DiagramDirectives): boolean {
+		if (directives?.mode === 'dark') return true;
+		if (directives?.mode === 'light') return false;
+		return this.isDarkMode();
+	}
+
 	private enhanceMermaidDiagram(element: HTMLElement) {
 		if (!element.hasClass('pretty-mermaid-enhanced')) {
 			element.addClass('pretty-mermaid-enhanced');
@@ -268,18 +274,23 @@ export default class PrettyMermaidPlugin extends Plugin {
 
 		const theme = directives.theme || this.settings.theme;
 		const mode = directives.mode || this.settings.colorMode;
+		const isDark = this.getEffectiveIsDark(directives);
 
 		// Clean previous theme / mode classes
 		AVAILABLE_THEMES.forEach((t) => element.removeClass(`pretty-mermaid-${t}`));
 		element.removeClass('pretty-mermaid-mode-light');
 		element.removeClass('pretty-mermaid-mode-dark');
 		element.removeClass('pretty-mermaid-mode-auto');
+		element.removeClass('pretty-mermaid-is-dark');
+		element.removeClass('pretty-mermaid-is-light');
 
 		// Apply theme and mode classes
 		element.addClass(`pretty-mermaid-${theme}`);
 		element.addClass(`pretty-mermaid-mode-${mode}`);
+		element.addClass(isDark ? 'pretty-mermaid-is-dark' : 'pretty-mermaid-is-light');
 		element.setAttribute('data-theme', theme);
 		element.setAttribute('data-mode', mode);
+		element.setAttribute('data-is-dark', String(isDark));
 		if (directives.zoom !== undefined) {
 			element.setAttribute('data-zoom', String(directives.zoom));
 		}
@@ -513,11 +524,16 @@ export default class PrettyMermaidPlugin extends Plugin {
 				} catch (e) {}
 			}
 			const mode = directives.mode || this.settings.colorMode;
+			const isDark = this.getEffectiveIsDark(directives);
 			htmlEl.removeClass('pretty-mermaid-mode-light');
 			htmlEl.removeClass('pretty-mermaid-mode-dark');
 			htmlEl.removeClass('pretty-mermaid-mode-auto');
+			htmlEl.removeClass('pretty-mermaid-is-dark');
+			htmlEl.removeClass('pretty-mermaid-is-light');
 			htmlEl.addClass(`pretty-mermaid-mode-${mode}`);
+			htmlEl.addClass(isDark ? 'pretty-mermaid-is-dark' : 'pretty-mermaid-is-light');
 			htmlEl.setAttribute('data-mode', mode);
+			htmlEl.setAttribute('data-is-dark', String(isDark));
 		});
 	}
 
@@ -543,9 +559,9 @@ export default class PrettyMermaidPlugin extends Plugin {
 			if (isDark) {
 				return {
 					primaryColor: 'var(--background-primary, #1e1e24)',
-					primaryTextColor: 'var(--text-normal, #dcddde)',
+					primaryTextColor: '#f8fafc',
 					primaryBorderColor: 'var(--background-modifier-border, #3a3b44)',
-					lineColor: 'var(--text-muted, #94a3b8)',
+					lineColor: '#94a3b8',
 					sectionBkgColor: 'var(--background-secondary, #16161a)',
 					altSectionBkgColor: 'var(--background-secondary, #16161a)',
 					gridColor: 'var(--background-modifier-border, #334155)',
@@ -557,16 +573,16 @@ export default class PrettyMermaidPlugin extends Plugin {
 					tertiaryBkg: 'var(--background-secondary-alt, #23242b)',
 					clusterBkg: 'var(--background-secondary, #16161a)',
 					clusterBorder: 'var(--interactive-accent, #8b5cf6)',
-					clusterTextColor: 'var(--text-normal, #dcddde)',
-					defaultLinkColor: 'var(--text-muted, #94a3b8)',
-					titleColor: 'var(--text-normal, #dcddde)',
+					clusterTextColor: '#f8fafc',
+					defaultLinkColor: '#94a3b8',
+					titleColor: '#f8fafc',
 					edgeLabelBackground: 'var(--background-primary, #121214)',
 					actorBorder: 'var(--interactive-accent, #8b5cf6)',
 					actorBkg: 'var(--background-primary, #1e1e24)',
-					actorTextColor: 'var(--text-normal, #dcddde)',
-					actorLineColor: 'var(--text-muted, #94a3b8)',
+					actorTextColor: '#f8fafc',
+					actorLineColor: '#94a3b8',
 					signalColor: 'var(--interactive-accent, #8b5cf6)',
-					signalTextColor: 'var(--text-normal, #dcddde)',
+					signalTextColor: '#f8fafc',
 					c0: 'var(--background-primary, #1e1e24)',
 					c1: 'var(--background-secondary, #16161a)',
 					c2: 'var(--background-secondary-alt, #23242b)',
@@ -1107,29 +1123,36 @@ ${selector} {
 
 	private generateAllThemesCss(): string {
 		let css = '';
+		const globalIsDark = this.isDarkMode();
 
 		for (const t of AVAILABLE_THEMES) {
 			const lightVars = this.getThemePalette(t, false);
 			const darkVars = this.getThemePalette(t, true);
 
-			// Base default (light)
-			css += this.generateVariablesCss(`.pretty-mermaid-${t}`, lightVars);
+			// Base default dynamically follows current vault mode
+			css += this.generateVariablesCss(`.pretty-mermaid-${t}`, globalIsDark ? darkVars : lightVars);
 
-			// Light mode overrides
+			// Explicit dark selectors (direct element class, mode attribute, or Obsidian theme class)
 			css += this.generateVariablesCss(
-				`.theme-light .pretty-mermaid-${t}, .pretty-mermaid-mode-light.pretty-mermaid-${t}`,
-				lightVars
-			);
-
-			// Dark mode overrides (Obsidian dark theme or forced dark mode)
-			css += this.generateVariablesCss(
-				`.theme-dark .pretty-mermaid-${t}, .pretty-mermaid-mode-dark.pretty-mermaid-${t}`,
+				`.pretty-mermaid-${t}.pretty-mermaid-is-dark,
+				 .pretty-mermaid-${t}.pretty-mermaid-mode-dark,
+				 .pretty-mermaid-${t}[data-is-dark="true"],
+				 .theme-dark .pretty-mermaid-${t},
+				 body.theme-dark .pretty-mermaid-${t},
+				 html.theme-dark .pretty-mermaid-${t}`,
 				darkVars
 			);
 
-			// Explicit mode class on container always takes precedence
-			css += this.generateVariablesCss(`.pretty-mermaid-mode-light.pretty-mermaid-${t}`, lightVars);
-			css += this.generateVariablesCss(`.pretty-mermaid-mode-dark.pretty-mermaid-${t}`, darkVars);
+			// Explicit light selectors (direct element class, mode attribute, or Obsidian theme class)
+			css += this.generateVariablesCss(
+				`.pretty-mermaid-${t}.pretty-mermaid-is-light,
+				 .pretty-mermaid-${t}.pretty-mermaid-mode-light,
+				 .pretty-mermaid-${t}[data-is-dark="false"],
+				 .theme-light .pretty-mermaid-${t},
+				 body.theme-light .pretty-mermaid-${t},
+				 html.theme-light .pretty-mermaid-${t}`,
+				lightVars
+			);
 		}
 
 		// Common dynamic variable mappings to SVG and HTML elements
@@ -1192,10 +1215,24 @@ ${selector} {
 .pretty-mermaid-enhanced .node .nodeLabel,
 .pretty-mermaid-enhanced .node span,
 .pretty-mermaid-enhanced .node div,
-.pretty-mermaid-enhanced .node text,
-.pretty-mermaid-enhanced .node tspan {
-  color: var(--mermaid-primary-text-color) !important;
-  fill: var(--mermaid-primary-text-color) !important;
+.pretty-mermaid-enhanced .node p,
+.pretty-mermaid-enhanced .node b,
+.pretty-mermaid-enhanced .node strong,
+.pretty-mermaid-enhanced .node em,
+.pretty-mermaid-enhanced .node i,
+.pretty-mermaid-enhanced .cluster-label,
+.pretty-mermaid-enhanced .cluster text,
+.pretty-mermaid-enhanced .actor text,
+.pretty-mermaid-enhanced .messageText,
+.pretty-mermaid-enhanced .loopText {
+  color: var(--mermaid-primary-text-color, #ffffff) !important;
+  fill: var(--mermaid-primary-text-color, #ffffff) !important;
+  stroke: none !important;
+  stroke-width: 0 !important;
+  -webkit-text-stroke: 0 !important;
+  paint-order: fill !important;
+  opacity: 1 !important;
+  filter: none !important;
 }
 
 .pretty-mermaid-enhanced .edgePath .path,

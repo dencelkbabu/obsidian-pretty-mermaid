@@ -67,19 +67,41 @@
   font-family: var(--font-monospace), "JetBrains Mono", ui-monospace, monospace !important;
 }
 
-/* Universal Text Color & Fill for Dark/Light Themes */
+/* Universal Text Color & Fill for Dark/Light Themes (Eliminate text stroke outlines & enforce full opacity) */
 .pretty-mermaid-enhanced text,
 .pretty-mermaid-enhanced tspan,
 .pretty-mermaid-enhanced .nodeLabel,
+.pretty-mermaid-enhanced .nodeLabel *,
 .pretty-mermaid-enhanced .label,
+.pretty-mermaid-enhanced .label *,
 .pretty-mermaid-enhanced .edgeLabel,
 .pretty-mermaid-enhanced .edgeLabel *,
 .pretty-mermaid-enhanced .node foreignObject,
 .pretty-mermaid-enhanced .node foreignObject *,
 .pretty-mermaid-enhanced foreignObject,
-.pretty-mermaid-enhanced foreignObject * {
-  color: var(--mermaid-primary-text-color) !important;
-  fill: var(--mermaid-primary-text-color) !important;
+.pretty-mermaid-enhanced foreignObject *,
+.pretty-mermaid-enhanced .node .label,
+.pretty-mermaid-enhanced .node .nodeLabel,
+.pretty-mermaid-enhanced .node span,
+.pretty-mermaid-enhanced .node div,
+.pretty-mermaid-enhanced .node p,
+.pretty-mermaid-enhanced .node b,
+.pretty-mermaid-enhanced .node strong,
+.pretty-mermaid-enhanced .node em,
+.pretty-mermaid-enhanced .node i,
+.pretty-mermaid-enhanced .cluster-label,
+.pretty-mermaid-enhanced .cluster text,
+.pretty-mermaid-enhanced .actor text,
+.pretty-mermaid-enhanced .messageText,
+.pretty-mermaid-enhanced .loopText {
+  color: var(--mermaid-primary-text-color, #ffffff) !important;
+  fill: var(--mermaid-primary-text-color, #ffffff) !important;
+  stroke: none !important;
+  stroke-width: 0 !important;
+  -webkit-text-stroke: 0 !important;
+  paint-order: fill !important;
+  opacity: 1 !important;
+  filter: none !important;
 }
 
 /* Node Geometry & Modern Corner Radii */
