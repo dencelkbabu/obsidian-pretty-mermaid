@@ -3,12 +3,14 @@ import { App, Plugin, PluginSettingTab, Setting } from 'obsidian';
 interface PrettyMermaidSettings {
 	enabled: boolean;
 	theme: 'classic' | 'monochrome';
+	colorMode: 'auto' | 'light' | 'dark';
 	customCss: string;
 }
 
 const DEFAULT_SETTINGS: PrettyMermaidSettings = {
 	enabled: true,
 	theme: 'classic',
+	colorMode: 'auto',
 	customCss: ''
 }
 
@@ -385,6 +387,19 @@ class PrettyMermaidSettingTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.theme)
 				.onChange(async (value) => {
 					this.plugin.settings.theme = value as PrettyMermaidSettings['theme'];
+					await this.plugin.saveSettings();
+				}));
+
+		new Setting(containerEl)
+			.setName('Color Mode')
+			.setDesc('Choose between dynamic automatic theme detection, always light, or always dark mode')
+			.addDropdown(dropdown => dropdown
+				.addOption('auto', 'Auto (Follow Obsidian)')
+				.addOption('light', 'Light Mode')
+				.addOption('dark', 'Dark Mode')
+				.setValue(this.plugin.settings.colorMode || 'auto')
+				.onChange(async (value) => {
+					this.plugin.settings.colorMode = value as PrettyMermaidSettings['colorMode'];
 					await this.plugin.saveSettings();
 				}));
 
