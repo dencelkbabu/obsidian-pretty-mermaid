@@ -5,25 +5,87 @@
    ========================================================================== */
 
 .pretty-mermaid-enhanced {
-  border-radius: 10px;
-  padding: 20px;
-  margin: 20px 0;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-  background: var(--background-secondary);
+  position: relative;
+  border-radius: 12px;
+  padding: 24px 20px;
+  margin: 24px 0;
+  background: var(--background-secondary, #202024);
+  border: 1px solid var(--background-modifier-border, rgba(127, 127, 127, 0.2));
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.25s ease;
+  overflow: hidden;
 }
 
 .pretty-mermaid-enhanced:hover {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 8px 30px -4px rgba(0, 0, 0, 0.12), 0 4px 12px -2px rgba(0, 0, 0, 0.06);
+  border-color: var(--interactive-accent, rgba(127, 127, 127, 0.35));
 }
 
-/* Fix common sizing & alignment issues */
+/* Sizing & alignment */
 .pretty-mermaid-enhanced svg {
   max-width: 100%;
   height: auto;
   display: block;
   margin: 0 auto;
+  overflow: visible;
 }
+
+/* Modern Typography */
+.pretty-mermaid-enhanced,
+.pretty-mermaid-enhanced text,
+.pretty-mermaid-enhanced .nodeLabel,
+.pretty-mermaid-enhanced .label,
+.pretty-mermaid-enhanced .edgeLabel,
+.pretty-mermaid-enhanced .cluster-label,
+.pretty-mermaid-enhanced .actor,
+.pretty-mermaid-enhanced .messageText {
+  font-family: var(--font-interface), var(--font-text), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Geist", sans-serif !important;
+  letter-spacing: -0.01em;
+}
+
+.pretty-mermaid-enhanced code,
+.pretty-mermaid-enhanced pre,
+.pretty-mermaid-enhanced .label code {
+  font-family: var(--font-monospace), "JetBrains Mono", ui-monospace, monospace !important;
+}
+
+/* Node Geometry & Modern Corner Radii */
+.pretty-mermaid-enhanced .node rect,
+.pretty-mermaid-enhanced .node polygon,
+.pretty-mermaid-enhanced .node path {
+  rx: 8px !important;
+  ry: 8px !important;
+  transition: filter 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              stroke 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              stroke-width 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pretty-mermaid-enhanced .cluster rect,
+.pretty-mermaid-enhanced g.cluster rect {
+  rx: 10px !important;
+  ry: 10px !important;
+}
+
+/* Node Hover Micro-Interactions */
+.pretty-mermaid-enhanced .node:hover rect,
+.pretty-mermaid-enhanced .node:hover circle,
+.pretty-mermaid-enhanced .node:hover ellipse,
+.pretty-mermaid-enhanced .node:hover polygon {
+  filter: brightness(1.08) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.14));
+  cursor: pointer;
+}
+
+/* Modern Edge Labels (frosted pill appearance) */
+.pretty-mermaid-enhanced .edgeLabel {
+  border-radius: 6px !important;
+  padding: 2px 6px !important;
+  font-size: 0.85em !important;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
 
 
 /* ==========================================================================
