@@ -1,18 +1,30 @@
 import { App, Plugin, PluginSettingTab, Setting } from 'obsidian';
 
+export const AVAILABLE_THEMES = [
+	'adaptive',
+	'catppuccin',
+	'tokyo-night',
+	'nord',
+	'minimalist',
+	'classic',
+	'monochrome'
+] as const;
+
+export type MermaidTheme = typeof AVAILABLE_THEMES[number];
+
 interface PrettyMermaidSettings {
 	enabled: boolean;
-	theme: 'classic' | 'monochrome';
+	theme: MermaidTheme;
 	colorMode: 'auto' | 'light' | 'dark';
 	customCss: string;
 }
 
 const DEFAULT_SETTINGS: PrettyMermaidSettings = {
 	enabled: true,
-	theme: 'classic',
+	theme: 'adaptive',
 	colorMode: 'auto',
 	customCss: ''
-}
+};
 
 interface ThemePalette {
 	primaryColor: string;
@@ -147,8 +159,7 @@ export default class PrettyMermaidPlugin extends Plugin {
 		}
 
 		// Clean previous theme / mode classes
-		element.removeClass('pretty-mermaid-classic');
-		element.removeClass('pretty-mermaid-monochrome');
+		AVAILABLE_THEMES.forEach((t) => element.removeClass(`pretty-mermaid-${t}`));
 		element.removeClass('pretty-mermaid-mode-light');
 		element.removeClass('pretty-mermaid-mode-dark');
 		element.removeClass('pretty-mermaid-mode-auto');
@@ -156,6 +167,8 @@ export default class PrettyMermaidPlugin extends Plugin {
 		// Apply theme and mode classes
 		element.addClass(`pretty-mermaid-${this.settings.theme}`);
 		element.addClass(`pretty-mermaid-mode-${this.settings.colorMode}`);
+		element.setAttribute('data-theme', this.settings.theme);
+		element.setAttribute('data-mode', this.settings.colorMode);
 		
 		// Apply Mermaid theme variables by injecting CSS
 		this.applyMermaidTheme();
@@ -187,7 +200,384 @@ export default class PrettyMermaidPlugin extends Plugin {
 		styleElement.textContent = css;
 	}
 
-	private getThemePalette(themeName: 'classic' | 'monochrome', isDark: boolean): ThemePalette {
+	private getThemePalette(themeName: MermaidTheme, isDark: boolean): ThemePalette {
+		if (themeName === 'adaptive') {
+			if (isDark) {
+				return {
+					primaryColor: 'var(--background-secondary, #1e1e24)',
+					primaryTextColor: 'var(--text-normal, #dcddde)',
+					primaryBorderColor: 'var(--background-modifier-border, #3a3b44)',
+					lineColor: 'var(--text-muted, #94a3b8)',
+					sectionBkgColor: 'var(--background-primary-alt, #16161a)',
+					altSectionBkgColor: 'var(--background-primary-alt, #16161a)',
+					gridColor: 'var(--background-modifier-border, #334155)',
+					secondaryColor: 'var(--background-primary-alt, #16161a)',
+					tertiaryColor: 'var(--background-secondary-alt, #23242b)',
+					background: 'var(--background-primary, #121214)',
+					mainBkg: 'var(--background-secondary, #1e1e24)',
+					secondBkg: 'var(--background-primary-alt, #16161a)',
+					tertiaryBkg: 'var(--background-secondary-alt, #23242b)',
+					clusterBkg: 'var(--background-primary-alt, #16161a)',
+					clusterBorder: 'var(--interactive-accent, #8b5cf6)',
+					clusterTextColor: 'var(--text-normal, #dcddde)',
+					defaultLinkColor: 'var(--text-muted, #94a3b8)',
+					titleColor: 'var(--text-normal, #dcddde)',
+					edgeLabelBackground: 'var(--background-primary, #121214)',
+					actorBorder: 'var(--interactive-accent, #8b5cf6)',
+					actorBkg: 'var(--background-secondary, #1e1e24)',
+					actorTextColor: 'var(--text-normal, #dcddde)',
+					actorLineColor: 'var(--text-muted, #94a3b8)',
+					signalColor: 'var(--interactive-accent, #8b5cf6)',
+					signalTextColor: 'var(--text-normal, #dcddde)',
+					c0: 'var(--background-secondary, #1e1e24)',
+					c1: 'var(--background-primary-alt, #16161a)',
+					c2: 'var(--background-secondary-alt, #23242b)',
+					c3: 'var(--interactive-accent, #8b5cf6)',
+					c4: 'var(--color-blue, #60a5fa)',
+					c5: 'var(--color-green, #4ade80)',
+					c6: 'var(--color-orange, #fb923c)',
+					c7: 'var(--color-red, #f87171)'
+				};
+			}
+			return {
+				primaryColor: 'var(--background-secondary, #f8fafc)',
+				primaryTextColor: 'var(--text-normal, #1e293b)',
+				primaryBorderColor: 'var(--background-modifier-border, #e2e8f0)',
+				lineColor: 'var(--text-muted, #64748b)',
+				sectionBkgColor: 'var(--background-primary-alt, #f1f5f9)',
+				altSectionBkgColor: 'var(--background-primary-alt, #f1f5f9)',
+				gridColor: 'var(--background-modifier-border, #cbd5e1)',
+				secondaryColor: 'var(--background-primary-alt, #f1f5f9)',
+				tertiaryColor: 'var(--background-secondary-alt, #e2e8f0)',
+				background: 'var(--background-primary, #ffffff)',
+				mainBkg: 'var(--background-secondary, #f8fafc)',
+				secondBkg: 'var(--background-primary-alt, #f1f5f9)',
+				tertiaryBkg: 'var(--background-secondary-alt, #e2e8f0)',
+				clusterBkg: 'var(--background-primary-alt, #f8fafc)',
+				clusterBorder: 'var(--interactive-accent, #7c3aed)',
+				clusterTextColor: 'var(--text-normal, #1e293b)',
+				defaultLinkColor: 'var(--text-muted, #64748b)',
+				titleColor: 'var(--text-normal, #1e293b)',
+				edgeLabelBackground: 'var(--background-primary, #ffffff)',
+				actorBorder: 'var(--interactive-accent, #7c3aed)',
+				actorBkg: 'var(--background-secondary, #f8fafc)',
+				actorTextColor: 'var(--text-normal, #1e293b)',
+				actorLineColor: 'var(--text-muted, #64748b)',
+				signalColor: 'var(--interactive-accent, #7c3aed)',
+				signalTextColor: 'var(--text-normal, #1e293b)',
+				c0: 'var(--background-secondary, #f8fafc)',
+				c1: 'var(--background-primary-alt, #f1f5f9)',
+				c2: 'var(--background-secondary-alt, #e2e8f0)',
+				c3: 'var(--interactive-accent, #7c3aed)',
+				c4: 'var(--color-blue, #2563eb)',
+				c5: 'var(--color-green, #16a34a)',
+				c6: 'var(--color-orange, #ea580c)',
+				c7: 'var(--color-red, #dc2626)'
+			};
+		}
+
+		if (themeName === 'catppuccin') {
+			if (isDark) {
+				// Catppuccin Mocha
+				return {
+					primaryColor: '#313244',
+					primaryTextColor: '#cdd6f4',
+					primaryBorderColor: '#585b70',
+					lineColor: '#89dceb',
+					sectionBkgColor: '#181825',
+					altSectionBkgColor: '#181825',
+					gridColor: '#45475a',
+					secondaryColor: '#1e1e2e',
+					tertiaryColor: '#11111b',
+					background: '#1e1e2e',
+					mainBkg: '#313244',
+					secondBkg: '#181825',
+					tertiaryBkg: '#11111b',
+					clusterBkg: '#181825',
+					clusterBorder: '#cba6f7',
+					clusterTextColor: '#cdd6f4',
+					defaultLinkColor: '#89dceb',
+					titleColor: '#cba6f7',
+					edgeLabelBackground: '#1e1e2e',
+					actorBorder: '#b4befe',
+					actorBkg: '#313244',
+					actorTextColor: '#cdd6f4',
+					actorLineColor: '#6c7086',
+					signalColor: '#f5c2e7',
+					signalTextColor: '#cdd6f4',
+					c0: '#313244',
+					c1: '#181825',
+					c2: '#45475a',
+					c3: '#cba6f7',
+					c4: '#89b4fa',
+					c5: '#a6e3a1',
+					c6: '#fab387',
+					c7: '#f38ba8'
+				};
+			}
+			// Catppuccin Latte
+			return {
+				primaryColor: '#e6e9ef',
+				primaryTextColor: '#4c4f69',
+				primaryBorderColor: '#acb0be',
+				lineColor: '#04a5e5',
+				sectionBkgColor: '#eff1f5',
+				altSectionBkgColor: '#eff1f5',
+				gridColor: '#ccd0da',
+				secondaryColor: '#dce0e8',
+				tertiaryColor: '#eff1f5',
+				background: '#eff1f5',
+				mainBkg: '#e6e9ef',
+				secondBkg: '#eff1f5',
+				tertiaryBkg: '#dce0e8',
+				clusterBkg: '#eff1f5',
+				clusterBorder: '#8839ef',
+				clusterTextColor: '#4c4f69',
+				defaultLinkColor: '#04a5e5',
+				titleColor: '#8839ef',
+				edgeLabelBackground: '#eff1f5',
+				actorBorder: '#7287fd',
+				actorBkg: '#e6e9ef',
+				actorTextColor: '#4c4f69',
+				actorLineColor: '#9ca0b0',
+				signalColor: '#ea76cb',
+				signalTextColor: '#4c4f69',
+				c0: '#e6e9ef',
+				c1: '#eff1f5',
+				c2: '#ccd0da',
+				c3: '#8839ef',
+				c4: '#1e66f5',
+				c5: '#40a02b',
+				c6: '#fe640b',
+				c7: '#d20f39'
+			};
+		}
+
+		if (themeName === 'tokyo-night') {
+			if (isDark) {
+				return {
+					primaryColor: '#24283b',
+					primaryTextColor: '#c0caf5',
+					primaryBorderColor: '#414868',
+					lineColor: '#7aa2f7',
+					sectionBkgColor: '#1f2335',
+					altSectionBkgColor: '#1f2335',
+					gridColor: '#292e42',
+					secondaryColor: '#16161e',
+					tertiaryColor: '#1a1b26',
+					background: '#1a1b26',
+					mainBkg: '#24283b',
+					secondBkg: '#1f2335',
+					tertiaryBkg: '#16161e',
+					clusterBkg: '#1f2335',
+					clusterBorder: '#bb9af7',
+					clusterTextColor: '#c0caf5',
+					defaultLinkColor: '#7aa2f7',
+					titleColor: '#7dcfff',
+					edgeLabelBackground: '#1a1b26',
+					actorBorder: '#bb9af7',
+					actorBkg: '#24283b',
+					actorTextColor: '#c0caf5',
+					actorLineColor: '#565f89',
+					signalColor: '#7dcfff',
+					signalTextColor: '#c0caf5',
+					c0: '#24283b',
+					c1: '#1f2335',
+					c2: '#292e42',
+					c3: '#bb9af7',
+					c4: '#7aa2f7',
+					c5: '#9ece6a',
+					c6: '#ff9e64',
+					c7: '#f7768e'
+				};
+			}
+			return {
+				primaryColor: '#e9e9ed',
+				primaryTextColor: '#3760bf',
+				primaryBorderColor: '#b4b5b9',
+				lineColor: '#2e7de9',
+				sectionBkgColor: '#d5d6db',
+				altSectionBkgColor: '#d5d6db',
+				gridColor: '#cfd0d5',
+				secondaryColor: '#e1e2e7',
+				tertiaryColor: '#f2f3f5',
+				background: '#f2f3f5',
+				mainBkg: '#e9e9ed',
+				secondBkg: '#d5d6db',
+				tertiaryBkg: '#e1e2e7',
+				clusterBkg: '#e1e2e7',
+				clusterBorder: '#9854f1',
+				clusterTextColor: '#3760bf',
+				defaultLinkColor: '#2e7de9',
+				titleColor: '#9854f1',
+				edgeLabelBackground: '#f2f3f5',
+				actorBorder: '#9854f1',
+				actorBkg: '#e9e9ed',
+				actorTextColor: '#3760bf',
+				actorLineColor: '#848998',
+				signalColor: '#007197',
+				signalTextColor: '#3760bf',
+				c0: '#e9e9ed',
+				c1: '#d5d6db',
+				c2: '#cfd0d5',
+				c3: '#9854f1',
+				c4: '#2e7de9',
+				c5: '#587539',
+				c6: '#b15c00',
+				c7: '#8c4351'
+			};
+		}
+
+		if (themeName === 'nord') {
+			if (isDark) {
+				return {
+					primaryColor: '#3b4252',
+					primaryTextColor: '#eceff4',
+					primaryBorderColor: '#4c566a',
+					lineColor: '#88c0d0',
+					sectionBkgColor: '#2e3440',
+					altSectionBkgColor: '#2e3440',
+					gridColor: '#434c5e',
+					secondaryColor: '#2e3440',
+					tertiaryColor: '#3b4252',
+					background: '#2e3440',
+					mainBkg: '#3b4252',
+					secondBkg: '#2e3440',
+					tertiaryBkg: '#2e3440',
+					clusterBkg: '#2e3440',
+					clusterBorder: '#88c0d0',
+					clusterTextColor: '#eceff4',
+					defaultLinkColor: '#88c0d0',
+					titleColor: '#8fbcbb',
+					edgeLabelBackground: '#2e3440',
+					actorBorder: '#81a1c1',
+					actorBkg: '#3b4252',
+					actorTextColor: '#eceff4',
+					actorLineColor: '#4c566a',
+					signalColor: '#88c0d0',
+					signalTextColor: '#eceff4',
+					c0: '#3b4252',
+					c1: '#2e3440',
+					c2: '#434c5e',
+					c3: '#88c0d0',
+					c4: '#81a1c1',
+					c5: '#a3be8c',
+					c6: '#d08770',
+					c7: '#bf616a'
+				};
+			}
+			return {
+				primaryColor: '#e5e9f0',
+				primaryTextColor: '#2e3440',
+				primaryBorderColor: '#d8dee9',
+				lineColor: '#5e81ac',
+				sectionBkgColor: '#eceff4',
+				altSectionBkgColor: '#eceff4',
+				gridColor: '#d8dee9',
+				secondaryColor: '#f0f4f8',
+				tertiaryColor: '#e5e9f0',
+				background: '#eceff4',
+				mainBkg: '#e5e9f0',
+				secondBkg: '#eceff4',
+				tertiaryBkg: '#f0f4f8',
+				clusterBkg: '#eceff4',
+				clusterBorder: '#5e81ac',
+				clusterTextColor: '#2e3440',
+				defaultLinkColor: '#5e81ac',
+				titleColor: '#5e81ac',
+				edgeLabelBackground: '#eceff4',
+				actorBorder: '#5e81ac',
+				actorBkg: '#e5e9f0',
+				actorTextColor: '#2e3440',
+				actorLineColor: '#d8dee9',
+				signalColor: '#5e81ac',
+				signalTextColor: '#2e3440',
+				c0: '#e5e9f0',
+				c1: '#eceff4',
+				c2: '#d8dee9',
+				c3: '#5e81ac',
+				c4: '#81a1c1',
+				c5: '#a3be8c',
+				c6: '#d08770',
+				c7: '#bf616a'
+			};
+		}
+
+		if (themeName === 'minimalist') {
+			if (isDark) {
+				return {
+					primaryColor: '#1e293b',
+					primaryTextColor: '#f8fafc',
+					primaryBorderColor: '#334155',
+					lineColor: '#94a3b8',
+					sectionBkgColor: '#0f172a',
+					altSectionBkgColor: '#0f172a',
+					gridColor: '#1e293b',
+					secondaryColor: '#0f172a',
+					tertiaryColor: '#1e293b',
+					background: '#0f172a',
+					mainBkg: '#1e293b',
+					secondBkg: '#0f172a',
+					tertiaryBkg: '#1e293b',
+					clusterBkg: '#0f172a',
+					clusterBorder: '#10b981',
+					clusterTextColor: '#f8fafc',
+					defaultLinkColor: '#94a3b8',
+					titleColor: '#10b981',
+					edgeLabelBackground: '#0f172a',
+					actorBorder: '#10b981',
+					actorBkg: '#1e293b',
+					actorTextColor: '#f8fafc',
+					actorLineColor: '#334155',
+					signalColor: '#10b981',
+					signalTextColor: '#f8fafc',
+					c0: '#1e293b',
+					c1: '#0f172a',
+					c2: '#334155',
+					c3: '#10b981',
+					c4: '#3b82f6',
+					c5: '#10b981',
+					c6: '#f59e0b',
+					c7: '#ef4444'
+				};
+			}
+			return {
+				primaryColor: '#ffffff',
+				primaryTextColor: '#0f172a',
+				primaryBorderColor: '#e2e8f0',
+				lineColor: '#64748b',
+				sectionBkgColor: '#f8fafc',
+				altSectionBkgColor: '#f8fafc',
+				gridColor: '#e2e8f0',
+				secondaryColor: '#f1f5f9',
+				tertiaryColor: '#ffffff',
+				background: '#ffffff',
+				mainBkg: '#ffffff',
+				secondBkg: '#f8fafc',
+				tertiaryBkg: '#f1f5f9',
+				clusterBkg: '#f8fafc',
+				clusterBorder: '#059669',
+				clusterTextColor: '#0f172a',
+				defaultLinkColor: '#64748b',
+				titleColor: '#059669',
+				edgeLabelBackground: '#ffffff',
+				actorBorder: '#059669',
+				actorBkg: '#ffffff',
+				actorTextColor: '#0f172a',
+				actorLineColor: '#cbd5e1',
+				signalColor: '#059669',
+				signalTextColor: '#0f172a',
+				c0: '#ffffff',
+				c1: '#f8fafc',
+				c2: '#e2e8f0',
+				c3: '#059669',
+				c4: '#2563eb',
+				c5: '#059669',
+				c6: '#d97706',
+				c7: '#dc2626'
+			};
+		}
+
 		if (themeName === 'classic') {
 			if (isDark) {
 				return {
@@ -378,10 +768,9 @@ ${selector} {
 	}
 
 	private generateAllThemesCss(): string {
-		const themes: Array<'classic' | 'monochrome'> = ['classic', 'monochrome'];
 		let css = '';
 
-		for (const t of themes) {
+		for (const t of AVAILABLE_THEMES) {
 			const lightVars = this.getThemePalette(t, false);
 			const darkVars = this.getThemePalette(t, true);
 
@@ -399,106 +788,107 @@ ${selector} {
 				`.theme-dark .pretty-mermaid-${t}:not(.pretty-mermaid-mode-light), .pretty-mermaid-mode-dark.pretty-mermaid-${t}`,
 				darkVars
 			);
+		}
 
-			// Dynamic variable mappings to SVG and HTML elements
-			css += `
-.pretty-mermaid-${t} .cluster rect,
-.pretty-mermaid-${t} g.cluster rect {
+		// Common dynamic variable mappings to SVG and HTML elements
+		css += `
+.pretty-mermaid-enhanced .cluster rect,
+.pretty-mermaid-enhanced g.cluster rect {
   fill: var(--mermaid-cluster-bkg) !important;
   stroke: var(--mermaid-cluster-border) !important;
-  stroke-width: 2px !important;
+  stroke-width: 1.5px !important;
 }
 
-.pretty-mermaid-${t} .cluster .cluster-label,
-.pretty-mermaid-${t} .cluster .nodeLabel,
-.pretty-mermaid-${t} .cluster span,
-.pretty-mermaid-${t} .cluster div,
-.pretty-mermaid-${t} .cluster text,
-.pretty-mermaid-${t} .cluster tspan {
+.pretty-mermaid-enhanced .cluster .cluster-label,
+.pretty-mermaid-enhanced .cluster .nodeLabel,
+.pretty-mermaid-enhanced .cluster span,
+.pretty-mermaid-enhanced .cluster div,
+.pretty-mermaid-enhanced .cluster text,
+.pretty-mermaid-enhanced .cluster tspan {
   color: var(--mermaid-cluster-text-color) !important;
   fill: var(--mermaid-cluster-text-color) !important;
 }
 
-.pretty-mermaid-${t} .node rect,
-.pretty-mermaid-${t} .node circle,
-.pretty-mermaid-${t} .node ellipse,
-.pretty-mermaid-${t} .node polygon,
-.pretty-mermaid-${t} .node path {
+.pretty-mermaid-enhanced .node rect,
+.pretty-mermaid-enhanced .node circle,
+.pretty-mermaid-enhanced .node ellipse,
+.pretty-mermaid-enhanced .node polygon,
+.pretty-mermaid-enhanced .node path {
   fill: var(--mermaid-primary-color) !important;
   stroke: var(--mermaid-primary-border-color) !important;
-  stroke-width: 2px !important;
+  stroke-width: 1.5px !important;
 }
 
-.pretty-mermaid-${t} .node .label,
-.pretty-mermaid-${t} .node .nodeLabel,
-.pretty-mermaid-${t} .node span,
-.pretty-mermaid-${t} .node div,
-.pretty-mermaid-${t} .node text,
-.pretty-mermaid-${t} .node tspan {
+.pretty-mermaid-enhanced .node .label,
+.pretty-mermaid-enhanced .node .nodeLabel,
+.pretty-mermaid-enhanced .node span,
+.pretty-mermaid-enhanced .node div,
+.pretty-mermaid-enhanced .node text,
+.pretty-mermaid-enhanced .node tspan {
   color: var(--mermaid-primary-text-color) !important;
   fill: var(--mermaid-primary-text-color) !important;
 }
 
-.pretty-mermaid-${t} .edgePath .path,
-.pretty-mermaid-${t} .flowchart-link {
+.pretty-mermaid-enhanced .edgePath .path,
+.pretty-mermaid-enhanced .flowchart-link {
   stroke: var(--mermaid-line-color) !important;
-  stroke-width: 2px !important;
+  stroke-width: 1.5px !important;
 }
 
-.pretty-mermaid-${t} .marker,
-.pretty-mermaid-${t} marker path {
+.pretty-mermaid-enhanced .marker,
+.pretty-mermaid-enhanced marker path {
   fill: var(--mermaid-line-color) !important;
   stroke: var(--mermaid-line-color) !important;
 }
 
-.pretty-mermaid-${t} .edgeLabel {
+.pretty-mermaid-enhanced .edgeLabel {
   background-color: var(--mermaid-edge-label-background) !important;
   color: var(--mermaid-primary-text-color) !important;
 }
 
-.pretty-mermaid-${t} .edgeLabel span,
-.pretty-mermaid-${t} .edgeLabel text {
+.pretty-mermaid-enhanced .edgeLabel span,
+.pretty-mermaid-enhanced .edgeLabel text {
   color: var(--mermaid-primary-text-color) !important;
   fill: var(--mermaid-primary-text-color) !important;
 }
 
-.pretty-mermaid-${t} .actor {
+.pretty-mermaid-enhanced .actor {
   fill: var(--mermaid-actor-bkg) !important;
   stroke: var(--mermaid-actor-border) !important;
-  stroke-width: 2px !important;
+  stroke-width: 1.5px !important;
 }
 
-.pretty-mermaid-${t} .actor-line {
+.pretty-mermaid-enhanced .actor-line {
   stroke: var(--mermaid-actor-line-color) !important;
 }
 
-.pretty-mermaid-${t} .messageLine0,
-.pretty-mermaid-${t} .messageLine1 {
+.pretty-mermaid-enhanced .messageLine0,
+.pretty-mermaid-enhanced .messageLine1 {
   stroke: var(--mermaid-signal-color) !important;
-  stroke-width: 2px !important;
+  stroke-width: 1.5px !important;
 }
 
-.pretty-mermaid-${t} .messageText,
-.pretty-mermaid-${t} .loopText {
+.pretty-mermaid-enhanced .messageText,
+.pretty-mermaid-enhanced .loopText {
   fill: var(--mermaid-signal-text-color) !important;
   color: var(--mermaid-signal-text-color) !important;
 }
 `;
-		}
 
 		return css;
 	}
 
 	private removePrettyMermaidStyles() {
-		// Remove all pretty-mermaid classes from existing diagrams
+		// Remove all pretty-mermaid classes and data attributes from existing diagrams
 		const enhancedElements = document.querySelectorAll('.pretty-mermaid-enhanced');
 		enhancedElements.forEach((el) => {
 			el.removeClass('pretty-mermaid-enhanced');
-			el.removeClass('pretty-mermaid-classic');
-			el.removeClass('pretty-mermaid-monochrome');
+			AVAILABLE_THEMES.forEach((t) => el.removeClass(`pretty-mermaid-${t}`));
 			el.removeClass('pretty-mermaid-mode-light');
 			el.removeClass('pretty-mermaid-mode-dark');
 			el.removeClass('pretty-mermaid-mode-auto');
+			el.removeAttribute('data-theme');
+			el.removeAttribute('data-mode');
 		});
 		
 		// Remove dynamically created style elements
@@ -592,11 +982,16 @@ class PrettyMermaidSettingTab extends PluginSettingTab {
 			.setName('Theme')
 			.setDesc('Select the styling theme for your Mermaid diagrams')
 			.addDropdown(dropdown => dropdown
-				.addOption('classic', 'Classic')
-				.addOption('monochrome', 'Monochrome')
+				.addOption('adaptive', 'Obsidian Native (Adaptive)')
+				.addOption('catppuccin', 'Catppuccin (Mocha & Latte)')
+				.addOption('tokyo-night', 'Tokyo Night')
+				.addOption('nord', 'Nordic Frost')
+				.addOption('minimalist', 'Minimalist Studio')
+				.addOption('classic', 'Classic (Legacy)')
+				.addOption('monochrome', 'Monochrome (Legacy)')
 				.setValue(this.plugin.settings.theme)
 				.onChange(async (value) => {
-					this.plugin.settings.theme = value as PrettyMermaidSettings['theme'];
+					this.plugin.settings.theme = value as MermaidTheme;
 					await this.plugin.saveSettings();
 				}));
 
@@ -624,4 +1019,4 @@ class PrettyMermaidSettingTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 				}));
 	}
-}
+}
