@@ -682,6 +682,75 @@ body:not(.theme-dark):not(.pretty-mermaid-mode-dark) .pretty-mermaid-monochrome:
 }
 
 
+/* Monochrome Sequence diagram light styling */
+.theme-light .pretty-mermaid-monochrome .actor,
+.pretty-mermaid-mode-light.pretty-mermaid-monochrome .actor,
+body:not(.theme-dark):not(.pretty-mermaid-mode-dark) .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-dark) .actor {
+  fill: #ffffff !important;
+  stroke: #6b7280 !important;
+  stroke-width: 1px !important;
+}
+
+.theme-light .pretty-mermaid-monochrome .actor-line,
+.pretty-mermaid-mode-light.pretty-mermaid-monochrome .actor-line,
+body:not(.theme-dark):not(.pretty-mermaid-mode-dark) .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-dark) .actor-line {
+  stroke: #9ca3af !important;
+  stroke-width: 1px !important;
+}
+
+.theme-light .pretty-mermaid-monochrome .messageLine0,
+.theme-light .pretty-mermaid-monochrome .messageLine1,
+.pretty-mermaid-mode-light.pretty-mermaid-monochrome .messageLine0,
+.pretty-mermaid-mode-light.pretty-mermaid-monochrome .messageLine1,
+body:not(.theme-dark):not(.pretty-mermaid-mode-dark) .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-dark) .messageLine0,
+body:not(.theme-dark):not(.pretty-mermaid-mode-dark) .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-dark) .messageLine1 {
+  stroke: #9ca3af !important;
+  stroke-width: 1px !important;
+}
+
+.theme-light .pretty-mermaid-monochrome .messageText,
+.theme-light .pretty-mermaid-monochrome .loopText,
+.pretty-mermaid-mode-light.pretty-mermaid-monochrome .messageText,
+.pretty-mermaid-mode-light.pretty-mermaid-monochrome .loopText,
+body:not(.theme-dark):not(.pretty-mermaid-mode-dark) .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-dark) .messageText,
+body:not(.theme-dark):not(.pretty-mermaid-mode-dark) .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-dark) .loopText {
+  fill: #374151 !important;
+  color: #374151 !important;
+}
+
+.theme-light .pretty-mermaid-monochrome .note,
+.pretty-mermaid-mode-light.pretty-mermaid-monochrome .note,
+body:not(.theme-dark):not(.pretty-mermaid-mode-dark) .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-dark) .note {
+  fill: #f3f4f6 !important;
+  stroke: #6b7280 !important;
+  stroke-width: 1px !important;
+}
+
+/* Monochrome Gantt, Class, State, ER, Pie light styling */
+.theme-light .pretty-mermaid-monochrome .classBox,
+.theme-light .pretty-mermaid-monochrome .classGroup rect,
+.theme-light .pretty-mermaid-monochrome .er.entityBox,
+.theme-light .pretty-mermaid-monochrome .statediagram-state rect,
+.theme-light .pretty-mermaid-monochrome .task0,
+.theme-light .pretty-mermaid-monochrome .task1,
+.pretty-mermaid-mode-light.pretty-mermaid-monochrome .classBox,
+.pretty-mermaid-mode-light.pretty-mermaid-monochrome .classGroup rect,
+.pretty-mermaid-mode-light.pretty-mermaid-monochrome .er.entityBox,
+.pretty-mermaid-mode-light.pretty-mermaid-monochrome .statediagram-state rect,
+.pretty-mermaid-mode-light.pretty-mermaid-monochrome .task0,
+.pretty-mermaid-mode-light.pretty-mermaid-monochrome .task1,
+body:not(.theme-dark):not(.pretty-mermaid-mode-dark) .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-dark) .classBox,
+body:not(.theme-dark):not(.pretty-mermaid-mode-dark) .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-dark) .classGroup rect,
+body:not(.theme-dark):not(.pretty-mermaid-mode-dark) .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-dark) .er.entityBox,
+body:not(.theme-dark):not(.pretty-mermaid-mode-dark) .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-dark) .statediagram-state rect,
+body:not(.theme-dark):not(.pretty-mermaid-mode-dark) .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-dark) .task0,
+body:not(.theme-dark):not(.pretty-mermaid-mode-dark) .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-dark) .task1 {
+  fill: #ffffff !important;
+  stroke: #6b7280 !important;
+  stroke-width: 1px !important;
+}
+
+
 /* ==========================================================================
    MONOCHROME THEME - DARK MODE
    ========================================================================== */
@@ -746,9 +815,88 @@ body:not(.theme-dark):not(.pretty-mermaid-mode-dark) .pretty-mermaid-monochrome:
 .theme-dark .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-light) .cluster text,
 .theme-dark .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-light) .cluster span,
 .pretty-mermaid-mode-dark.pretty-mermaid-monochrome .cluster .cluster-label,
-.pretty-mermaid-mode-dark.pretty-mermaid-classic .cluster text,
+.pretty-mermaid-mode-dark.pretty-mermaid-monochrome .cluster text,
 .pretty-mermaid-mode-dark.pretty-mermaid-monochrome .cluster span {
   color: #f3f4f6 !important;
   fill: #f3f4f6 !important;
   font-weight: bold !important;
+}
+
+/* Dark theme sequence diagram styling */
+.theme-dark .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-light) .actor,
+.pretty-mermaid-mode-dark.pretty-mermaid-monochrome .actor {
+  fill: #1f2937 !important;
+  stroke: #64748b !important;
+  stroke-width: 1px !important;
+}
+
+.theme-dark .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-light) .actor text,
+.pretty-mermaid-mode-dark.pretty-mermaid-monochrome .actor text {
+  fill: #f3f4f6 !important;
+}
+
+.theme-dark .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-light) .actor-line,
+.pretty-mermaid-mode-dark.pretty-mermaid-monochrome .actor-line {
+  stroke: #64748b !important;
+}
+
+.theme-dark .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-light) .messageLine0,
+.theme-dark .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-light) .messageLine1,
+.pretty-mermaid-mode-dark.pretty-mermaid-monochrome .messageLine0,
+.pretty-mermaid-mode-dark.pretty-mermaid-monochrome .messageLine1 {
+  stroke: #94a3b8 !important;
+}
+
+.theme-dark .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-light) .messageText,
+.theme-dark .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-light) .loopText,
+.pretty-mermaid-mode-dark.pretty-mermaid-monochrome .messageText,
+.pretty-mermaid-mode-dark.pretty-mermaid-monochrome .loopText {
+  fill: #f3f4f6 !important;
+  color: #f3f4f6 !important;
+}
+
+.theme-dark .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-light) .note,
+.pretty-mermaid-mode-dark.pretty-mermaid-monochrome .note {
+  fill: #374151 !important;
+  stroke: #64748b !important;
+  stroke-width: 1px !important;
+}
+
+.theme-dark .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-light) .note text,
+.pretty-mermaid-mode-dark.pretty-mermaid-monochrome .note text {
+  fill: #f3f4f6 !important;
+}
+
+/* Dark theme Gantt, Class, State, ER, Pie styling */
+.theme-dark .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-light) .classBox,
+.theme-dark .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-light) .classGroup rect,
+.theme-dark .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-light) .er.entityBox,
+.theme-dark .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-light) .statediagram-state rect,
+.theme-dark .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-light) .task0,
+.theme-dark .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-light) .task1,
+.pretty-mermaid-mode-dark.pretty-mermaid-monochrome .classBox,
+.pretty-mermaid-mode-dark.pretty-mermaid-monochrome .classGroup rect,
+.pretty-mermaid-mode-dark.pretty-mermaid-monochrome .er.entityBox,
+.pretty-mermaid-mode-dark.pretty-mermaid-monochrome .statediagram-state rect,
+.pretty-mermaid-mode-dark.pretty-mermaid-monochrome .task0,
+.pretty-mermaid-mode-dark.pretty-mermaid-monochrome .task1 {
+  fill: #1f2937 !important;
+  stroke: #64748b !important;
+  stroke-width: 1px !important;
+}
+
+.theme-dark .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-light) .classTitleText,
+.theme-dark .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-light) .classText,
+.theme-dark .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-light) .taskText0,
+.theme-dark .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-light) .taskText1,
+.theme-dark .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-light) .pieTitleText,
+.theme-dark .pretty-mermaid-monochrome:not(.pretty-mermaid-mode-light) .er text,
+.pretty-mermaid-mode-dark.pretty-mermaid-monochrome .classTitleText,
+.pretty-mermaid-mode-dark.pretty-mermaid-monochrome .classText,
+.pretty-mermaid-mode-dark.pretty-mermaid-monochrome .taskText0,
+.pretty-mermaid-mode-dark.pretty-mermaid-monochrome .taskText1,
+.pretty-mermaid-mode-dark.pretty-mermaid-monochrome .pieTitleText,
+.pretty-mermaid-mode-dark.pretty-mermaid-monochrome .er text {
+  fill: #f3f4f6 !important;
+  color: #f3f4f6 !important;
 }
