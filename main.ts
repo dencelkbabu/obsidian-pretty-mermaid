@@ -1,4 +1,4 @@
-import { App, Plugin, PluginSettingTab, Setting, loadMermaid } from 'obsidian';
+import { App, Plugin, PluginSettingTab, Setting, loadMermaid, MarkdownPostProcessorContext } from 'obsidian';
 
 export const AVAILABLE_THEMES = [
 	'adaptive',
@@ -12,6 +12,12 @@ export const AVAILABLE_THEMES = [
 
 export type MermaidTheme = typeof AVAILABLE_THEMES[number];
 export type FlowchartCurve = 'natural' | 'basis' | 'cardinal' | 'linear' | 'default';
+
+export interface DiagramDirectives {
+	theme?: MermaidTheme;
+	mode?: 'auto' | 'light' | 'dark';
+	zoom?: boolean;
+}
 
 interface PrettyMermaidSettings {
 	enabled: boolean;
@@ -79,10 +85,10 @@ export default class PrettyMermaidPlugin extends Plugin {
 		// Register markdown post processor to enhance Mermaid diagrams
 		this.registerMarkdownPostProcessor((element, context) => {
 			if (this.settings.enabled) {
-				this.processMermaidDiagrams(element);
+				this.processMermaidDiagrams(element, context);
 				// Also retry after a delay to catch async-rendered diagrams
 				setTimeout(() => {
-					this.processMermaidDiagrams(element);
+					this.processMermaidDiagrams(element, context);
 				}, 100);
 			}
 		});
@@ -166,12 +172,59 @@ export default class PrettyMermaidPlugin extends Plugin {
 		);
 	}
 
-	private processMermaidDiagrams(element: HTMLElement) {
+	private parseDirectivesFromText(text: string): DiagramDirectives {
+		const directives: DiagramDirectives = {};
+		if (!text) return directives;
+
+		const lines = text.split('\n');
+		for (const line of lines) {
+			const trimmed = line.trim();
+			if (!trimmed.startsWith('%%')) continue;
+			const match = trimmed.match(/^%%\s*([a-zA-Z0-9_-]+)\s*:\s*(.+)$/);
+			if (match) {
+				const key = match[1].toLowerCase();
+				const val = match[2].trim().toLowerCase();
+				if (key === 'theme') {
+					if ((AVAILABLE_THEMES as readonly string[]).includes(val)) {
+						directives.theme = val as MermaidTheme;
+					}
+				} else if (key === 'mode') {
+					if (val === 'auto' || val === 'light' || val === 'dark') {
+						directives.mode = val;
+					}
+				} else if (key === 'zoom') {
+					directives.zoom = val === 'true' || val === 'yes' || val === '1';
+				}
+			}
+		}
+		return directives;
+	}
+
+	private processMermaidDiagrams(element: HTMLElement, context?: MarkdownPostProcessorContext) {
 		// Find all Mermaid diagrams in the element
 		const mermaidElements = element.querySelectorAll('.mermaid');
 		
 		mermaidElements.forEach((mermaidEl) => {
-			this.enhanceMermaidDiagram(mermaidEl as HTMLElement);
+			const el = mermaidEl as HTMLElement;
+
+			// Extract directives if present in raw text before SVG replacement
+			if (el.textContent && el.textContent.includes('%%')) {
+				const directives = this.parseDirectivesFromText(el.textContent);
+				if (Object.keys(directives).length > 0) {
+					el.dataset.pmDirectives = JSON.stringify(directives);
+				}
+			} else if (context) {
+				const section = context.getSectionInfo(el);
+				if (section) {
+					const text = section.text.split('\n').slice(section.lineStart, section.lineEnd + 1).join('\n');
+					const directives = this.parseDirectivesFromText(text);
+					if (Object.keys(directives).length > 0) {
+						el.dataset.pmDirectives = JSON.stringify(directives);
+					}
+				}
+			}
+
+			this.enhanceMermaidDiagram(el);
 		});
 	}
 
@@ -180,6 +233,18 @@ export default class PrettyMermaidPlugin extends Plugin {
 			element.addClass('pretty-mermaid-enhanced');
 		}
 
+		let directives: DiagramDirectives = {};
+		if (element.dataset.pmDirectives) {
+			try {
+				directives = JSON.parse(element.dataset.pmDirectives);
+			} catch (e) {
+				// ignore
+			}
+		}
+
+		const theme = directives.theme || this.settings.theme;
+		const mode = directives.mode || this.settings.colorMode;
+
 		// Clean previous theme / mode classes
 		AVAILABLE_THEMES.forEach((t) => element.removeClass(`pretty-mermaid-${t}`));
 		element.removeClass('pretty-mermaid-mode-light');
@@ -187,10 +252,13 @@ export default class PrettyMermaidPlugin extends Plugin {
 		element.removeClass('pretty-mermaid-mode-auto');
 
 		// Apply theme and mode classes
-		element.addClass(`pretty-mermaid-${this.settings.theme}`);
-		element.addClass(`pretty-mermaid-mode-${this.settings.colorMode}`);
-		element.setAttribute('data-theme', this.settings.theme);
-		element.setAttribute('data-mode', this.settings.colorMode);
+		element.addClass(`pretty-mermaid-${theme}`);
+		element.addClass(`pretty-mermaid-mode-${mode}`);
+		element.setAttribute('data-theme', theme);
+		element.setAttribute('data-mode', mode);
+		if (directives.zoom !== undefined) {
+			element.setAttribute('data-zoom', String(directives.zoom));
+		}
 		
 		// Apply Mermaid theme variables by injecting CSS
 		this.applyMermaidTheme();
@@ -198,10 +266,19 @@ export default class PrettyMermaidPlugin extends Plugin {
 
 	public updateModeClasses() {
 		document.querySelectorAll('.pretty-mermaid-enhanced').forEach((el) => {
-			el.removeClass('pretty-mermaid-mode-light');
-			el.removeClass('pretty-mermaid-mode-dark');
-			el.removeClass('pretty-mermaid-mode-auto');
-			el.addClass(`pretty-mermaid-mode-${this.settings.colorMode}`);
+			const htmlEl = el as HTMLElement;
+			let directives: DiagramDirectives = {};
+			if (htmlEl.dataset.pmDirectives) {
+				try {
+					directives = JSON.parse(htmlEl.dataset.pmDirectives);
+				} catch (e) {}
+			}
+			const mode = directives.mode || this.settings.colorMode;
+			htmlEl.removeClass('pretty-mermaid-mode-light');
+			htmlEl.removeClass('pretty-mermaid-mode-dark');
+			htmlEl.removeClass('pretty-mermaid-mode-auto');
+			htmlEl.addClass(`pretty-mermaid-mode-${mode}`);
+			htmlEl.setAttribute('data-mode', mode);
 		});
 	}
 
