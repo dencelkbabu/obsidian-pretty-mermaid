@@ -168,7 +168,8 @@ export default class PrettyMermaidPlugin extends Plugin {
 					themeVariables: {
 						fontFamily: 'var(--font-interface), var(--font-text), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif',
 						fontSize: '14px',
-						nodePadding: '24px'
+						nodePadding: '24px',
+						edgeLabelBackground: 'transparent'
 					}
 				});
 			}
@@ -928,7 +929,7 @@ export default class PrettyMermaidPlugin extends Plugin {
 					clusterTextColor: '#fde68a',
 					defaultLinkColor: '#cbd5e1',
 					titleColor: '#fde68a',
-					edgeLabelBackground: '#1e1a30',
+					edgeLabelBackground: '#181528',
 					actorBorder: '#a78bfa',
 					actorBkg: '#2d224e',
 					actorTextColor: '#f8fafc',
@@ -947,7 +948,7 @@ export default class PrettyMermaidPlugin extends Plugin {
 			}
 			return {
 				primaryColor: '#ECECFF',
-				primaryTextColor: '#333333',
+				primaryTextColor: '#1e1b4b',
 				primaryBorderColor: '#9370DB',
 				lineColor: '#333333',
 				sectionBkgColor: '#ffffde',
@@ -964,13 +965,13 @@ export default class PrettyMermaidPlugin extends Plugin {
 				clusterTextColor: '#333333',
 				defaultLinkColor: '#333333',
 				titleColor: '#333333',
-				edgeLabelBackground: '#e8e8e8',
+				edgeLabelBackground: '#ffffff',
 				actorBorder: '#9370DB',
 				actorBkg: '#ECECFF',
-				actorTextColor: '#333333',
+				actorTextColor: '#1e1b4b',
 				actorLineColor: '#333333',
 				signalColor: '#333333',
-				signalTextColor: '#333333',
+				signalTextColor: '#1e1b4b',
 				c0: '#ECECFF',
 				c1: '#ffffde',
 				c2: '#f9f9f9',
@@ -1196,15 +1197,27 @@ ${selector} {
   stroke: var(--mermaid-line-color) !important;
 }
 
-.pretty-mermaid-enhanced .edgeLabel {
+.pretty-mermaid-enhanced .edgeLabels,
+.pretty-mermaid-enhanced .edgeLabels g,
+.pretty-mermaid-enhanced .edgeLabel,
+.pretty-mermaid-enhanced .edgeLabel g,
+.pretty-mermaid-enhanced .edgeLabel .label,
+.pretty-mermaid-enhanced .edgeLabel foreignObject,
+.pretty-mermaid-enhanced .edgeLabel foreignObject > div {
+  background: transparent !important;
   background-color: transparent !important;
 }
 
+.pretty-mermaid-enhanced g.edgeLabels rect,
 .pretty-mermaid-enhanced g.edgeLabel rect,
-.pretty-mermaid-enhanced .edgeLabel rect {
+.pretty-mermaid-enhanced .edgeLabel rect,
+.pretty-mermaid-enhanced .edgeLabels rect,
+.pretty-mermaid-enhanced .edgeLabel polygon,
+.pretty-mermaid-enhanced .edgeLabel path {
   display: none !important;
   fill: transparent !important;
-  stroke: none !important;
+  stroke: transparent !important;
+  opacity: 0 !important;
 }
 
 .pretty-mermaid-enhanced .edgeLabel span,
@@ -1214,7 +1227,7 @@ ${selector} {
   color: var(--mermaid-primary-text-color, var(--text-normal)) !important;
   border: 1px solid var(--background-modifier-border, rgba(127, 127, 127, 0.25)) !important;
   border-radius: 6px !important;
-  padding: 2px 8px !important;
+  padding: 3px 10px !important;
   font-size: 0.82em !important;
   font-weight: 500 !important;
   display: inline-block !important;

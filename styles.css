@@ -103,22 +103,34 @@
 }
 
 /* Modern Edge Labels (clean pill appearance) */
-.pretty-mermaid-enhanced .edgeLabel {
+.pretty-mermaid-enhanced .edgeLabels,
+.pretty-mermaid-enhanced .edgeLabels g,
+.pretty-mermaid-enhanced .edgeLabel,
+.pretty-mermaid-enhanced .edgeLabel g,
+.pretty-mermaid-enhanced .edgeLabel .label,
+.pretty-mermaid-enhanced .edgeLabel foreignObject,
+.pretty-mermaid-enhanced .edgeLabel foreignObject > div {
+  background: transparent !important;
   background-color: transparent !important;
 }
 
+.pretty-mermaid-enhanced g.edgeLabels rect,
 .pretty-mermaid-enhanced g.edgeLabel rect,
-.pretty-mermaid-enhanced .edgeLabel rect {
+.pretty-mermaid-enhanced .edgeLabel rect,
+.pretty-mermaid-enhanced .edgeLabels rect,
+.pretty-mermaid-enhanced .edgeLabel polygon,
+.pretty-mermaid-enhanced .edgeLabel path {
   display: none !important;
   fill: transparent !important;
-  stroke: none !important;
+  stroke: transparent !important;
+  opacity: 0 !important;
 }
 
 .pretty-mermaid-enhanced .edgeLabel span,
 .pretty-mermaid-enhanced .edgeLabel .label span,
 .pretty-mermaid-enhanced span.edgeLabel {
   border-radius: 6px !important;
-  padding: 2px 8px !important;
+  padding: 3px 10px !important;
   font-size: 0.82em !important;
   font-weight: 500 !important;
   background-color: var(--mermaid-edge-label-background, var(--background-primary)) !important;
