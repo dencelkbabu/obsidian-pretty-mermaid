@@ -522,33 +522,33 @@ export default class PrettyMermaidPlugin extends Plugin {
 		if (themeName === 'adaptive') {
 			if (isDark) {
 				return {
-					primaryColor: 'var(--background-secondary, #1e1e24)',
+					primaryColor: 'var(--background-primary, #1e1e24)',
 					primaryTextColor: 'var(--text-normal, #dcddde)',
 					primaryBorderColor: 'var(--background-modifier-border, #3a3b44)',
 					lineColor: 'var(--text-muted, #94a3b8)',
-					sectionBkgColor: 'var(--background-primary-alt, #16161a)',
-					altSectionBkgColor: 'var(--background-primary-alt, #16161a)',
+					sectionBkgColor: 'var(--background-secondary, #16161a)',
+					altSectionBkgColor: 'var(--background-secondary, #16161a)',
 					gridColor: 'var(--background-modifier-border, #334155)',
-					secondaryColor: 'var(--background-primary-alt, #16161a)',
+					secondaryColor: 'var(--background-secondary, #16161a)',
 					tertiaryColor: 'var(--background-secondary-alt, #23242b)',
-					background: 'var(--background-primary, #121214)',
-					mainBkg: 'var(--background-secondary, #1e1e24)',
-					secondBkg: 'var(--background-primary-alt, #16161a)',
+					background: 'var(--background-secondary, #121214)',
+					mainBkg: 'var(--background-primary, #1e1e24)',
+					secondBkg: 'var(--background-secondary, #16161a)',
 					tertiaryBkg: 'var(--background-secondary-alt, #23242b)',
-					clusterBkg: 'var(--background-primary-alt, #16161a)',
+					clusterBkg: 'var(--background-secondary, #16161a)',
 					clusterBorder: 'var(--interactive-accent, #8b5cf6)',
 					clusterTextColor: 'var(--text-normal, #dcddde)',
 					defaultLinkColor: 'var(--text-muted, #94a3b8)',
 					titleColor: 'var(--text-normal, #dcddde)',
 					edgeLabelBackground: 'var(--background-primary, #121214)',
 					actorBorder: 'var(--interactive-accent, #8b5cf6)',
-					actorBkg: 'var(--background-secondary, #1e1e24)',
+					actorBkg: 'var(--background-primary, #1e1e24)',
 					actorTextColor: 'var(--text-normal, #dcddde)',
 					actorLineColor: 'var(--text-muted, #94a3b8)',
 					signalColor: 'var(--interactive-accent, #8b5cf6)',
 					signalTextColor: 'var(--text-normal, #dcddde)',
-					c0: 'var(--background-secondary, #1e1e24)',
-					c1: 'var(--background-primary-alt, #16161a)',
+					c0: 'var(--background-primary, #1e1e24)',
+					c1: 'var(--background-secondary, #16161a)',
 					c2: 'var(--background-secondary-alt, #23242b)',
 					c3: 'var(--interactive-accent, #8b5cf6)',
 					c4: 'var(--color-blue, #60a5fa)',
@@ -558,33 +558,33 @@ export default class PrettyMermaidPlugin extends Plugin {
 				};
 			}
 			return {
-				primaryColor: 'var(--background-secondary, #f8fafc)',
+				primaryColor: 'var(--background-primary, #ffffff)',
 				primaryTextColor: 'var(--text-normal, #1e293b)',
 				primaryBorderColor: 'var(--background-modifier-border, #e2e8f0)',
 				lineColor: 'var(--text-muted, #64748b)',
-				sectionBkgColor: 'var(--background-primary-alt, #f1f5f9)',
-				altSectionBkgColor: 'var(--background-primary-alt, #f1f5f9)',
+				sectionBkgColor: 'var(--background-secondary, #f1f5f9)',
+				altSectionBkgColor: 'var(--background-secondary, #f1f5f9)',
 				gridColor: 'var(--background-modifier-border, #cbd5e1)',
-				secondaryColor: 'var(--background-primary-alt, #f1f5f9)',
+				secondaryColor: 'var(--background-secondary, #f1f5f9)',
 				tertiaryColor: 'var(--background-secondary-alt, #e2e8f0)',
-				background: 'var(--background-primary, #ffffff)',
-				mainBkg: 'var(--background-secondary, #f8fafc)',
-				secondBkg: 'var(--background-primary-alt, #f1f5f9)',
+				background: 'var(--background-secondary, #f8fafc)',
+				mainBkg: 'var(--background-primary, #ffffff)',
+				secondBkg: 'var(--background-secondary, #f1f5f9)',
 				tertiaryBkg: 'var(--background-secondary-alt, #e2e8f0)',
-				clusterBkg: 'var(--background-primary-alt, #f8fafc)',
+				clusterBkg: 'var(--background-secondary, #f1f5f9)',
 				clusterBorder: 'var(--interactive-accent, #7c3aed)',
 				clusterTextColor: 'var(--text-normal, #1e293b)',
 				defaultLinkColor: 'var(--text-muted, #64748b)',
 				titleColor: 'var(--text-normal, #1e293b)',
 				edgeLabelBackground: 'var(--background-primary, #ffffff)',
 				actorBorder: 'var(--interactive-accent, #7c3aed)',
-				actorBkg: 'var(--background-secondary, #f8fafc)',
+				actorBkg: 'var(--background-primary, #ffffff)',
 				actorTextColor: 'var(--text-normal, #1e293b)',
 				actorLineColor: 'var(--text-muted, #64748b)',
 				signalColor: 'var(--interactive-accent, #7c3aed)',
 				signalTextColor: 'var(--text-normal, #1e293b)',
-				c0: 'var(--background-secondary, #f8fafc)',
-				c1: 'var(--background-primary-alt, #f1f5f9)',
+				c0: 'var(--background-primary, #ffffff)',
+				c1: 'var(--background-secondary, #f1f5f9)',
 				c2: 'var(--background-secondary-alt, #e2e8f0)',
 				c3: 'var(--interactive-accent, #7c3aed)',
 				c4: 'var(--color-blue, #2563eb)',
@@ -1097,15 +1097,19 @@ ${selector} {
 
 			// Light mode overrides
 			css += this.generateVariablesCss(
-				`.theme-light .pretty-mermaid-${t}, .pretty-mermaid-mode-light.pretty-mermaid-${t}, body:not(.theme-dark):not(.pretty-mermaid-mode-dark) .pretty-mermaid-${t}:not(.pretty-mermaid-mode-dark)`,
+				`.theme-light .pretty-mermaid-${t}, .pretty-mermaid-mode-light.pretty-mermaid-${t}`,
 				lightVars
 			);
 
 			// Dark mode overrides (Obsidian dark theme or forced dark mode)
 			css += this.generateVariablesCss(
-				`.theme-dark .pretty-mermaid-${t}:not(.pretty-mermaid-mode-light), .pretty-mermaid-mode-dark.pretty-mermaid-${t}`,
+				`.theme-dark .pretty-mermaid-${t}, .pretty-mermaid-mode-dark.pretty-mermaid-${t}`,
 				darkVars
 			);
+
+			// Explicit mode class on container always takes precedence
+			css += this.generateVariablesCss(`.pretty-mermaid-mode-light.pretty-mermaid-${t}`, lightVars);
+			css += this.generateVariablesCss(`.pretty-mermaid-mode-dark.pretty-mermaid-${t}`, darkVars);
 		}
 
 		// Common dynamic variable mappings to SVG and HTML elements
@@ -1137,6 +1141,20 @@ ${selector} {
   stroke-width: 1.5px !important;
 }
 
+.pretty-mermaid-enhanced .node foreignObject {
+  overflow: visible !important;
+}
+
+.pretty-mermaid-enhanced .node foreignObject > div {
+  overflow: visible !important;
+  white-space: nowrap !important;
+  padding: 0 4px !important;
+}
+
+.pretty-mermaid-enhanced .node .label {
+  overflow: visible !important;
+}
+
 .pretty-mermaid-enhanced .node .label,
 .pretty-mermaid-enhanced .node .nodeLabel,
 .pretty-mermaid-enhanced .node span,
@@ -1160,14 +1178,26 @@ ${selector} {
 }
 
 .pretty-mermaid-enhanced .edgeLabel {
-  background-color: var(--mermaid-edge-label-background) !important;
-  color: var(--mermaid-primary-text-color) !important;
+  background-color: transparent !important;
+}
+
+.pretty-mermaid-enhanced g.edgeLabel rect,
+.pretty-mermaid-enhanced .edgeLabel rect {
+  display: none !important;
+  fill: transparent !important;
+  stroke: none !important;
 }
 
 .pretty-mermaid-enhanced .edgeLabel span,
-.pretty-mermaid-enhanced .edgeLabel text {
+.pretty-mermaid-enhanced .edgeLabel text,
+.pretty-mermaid-enhanced span.edgeLabel {
+  background-color: var(--mermaid-edge-label-background) !important;
   color: var(--mermaid-primary-text-color) !important;
-  fill: var(--mermaid-primary-text-color) !important;
+  border: 1px solid var(--background-modifier-border, rgba(127, 127, 127, 0.25)) !important;
+  border-radius: 6px !important;
+  padding: 2px 8px !important;
+  font-size: 0.82em !important;
+  display: inline-block !important;
 }
 
 .pretty-mermaid-enhanced .actor {

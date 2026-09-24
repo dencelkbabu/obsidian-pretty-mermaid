@@ -23,8 +23,10 @@
   border-color: var(--interactive-accent, rgba(127, 127, 127, 0.35));
 }
 
-/* Sizing & alignment */
-.pretty-mermaid-enhanced svg {
+/* Sizing & alignment - ONLY for diagram SVGs, not toolbar icons */
+.pretty-mermaid-enhanced > svg,
+.pretty-mermaid-enhanced .mermaid > svg,
+.pretty-mermaid-enhanced svg:not(.svg-icon) {
   max-width: 100%;
   height: auto;
   display: block;
@@ -68,6 +70,21 @@
   ry: 10px !important;
 }
 
+/* Prevent SVG foreignObject node text clipping */
+.pretty-mermaid-enhanced .node foreignObject {
+  overflow: visible !important;
+}
+
+.pretty-mermaid-enhanced .node foreignObject > div {
+  overflow: visible !important;
+  white-space: nowrap !important;
+  padding: 0 4px !important;
+}
+
+.pretty-mermaid-enhanced .node .label {
+  overflow: visible !important;
+}
+
 /* Node Hover Micro-Interactions */
 .pretty-mermaid-enhanced .node:hover rect,
 .pretty-mermaid-enhanced .node:hover circle,
@@ -77,14 +94,34 @@
   cursor: pointer;
 }
 
-/* Modern Edge Labels (frosted pill appearance) */
+/* Modern Edge Labels (clean pill appearance without background rect clipping) */
 .pretty-mermaid-enhanced .edgeLabel {
+  background-color: transparent !important;
+}
+
+.pretty-mermaid-enhanced g.edgeLabel rect,
+.pretty-mermaid-enhanced .edgeLabel rect {
+  display: none !important;
+  fill: transparent !important;
+  stroke: none !important;
+}
+
+.pretty-mermaid-enhanced .edgeLabel span,
+.pretty-mermaid-enhanced .edgeLabel .label span,
+.pretty-mermaid-enhanced span.edgeLabel {
   border-radius: 6px !important;
-  padding: 2px 6px !important;
-  font-size: 0.85em !important;
+  padding: 2px 8px !important;
+  font-size: 0.82em !important;
+  font-weight: 500 !important;
+  background-color: var(--mermaid-edge-label-background, var(--background-primary)) !important;
+  color: var(--mermaid-primary-text-color, var(--text-normal)) !important;
+  border: 1px solid var(--background-modifier-border, rgba(127, 127, 127, 0.25)) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+  display: inline-block !important;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
 }
+
 
 /* Modern Edge Paths & Arrowhead Markers */
 .pretty-mermaid-enhanced .edgePath .path,
@@ -1016,32 +1053,38 @@ body:not(.theme-dark):not(.pretty-mermaid-mode-dark) .pretty-mermaid-monochrome:
 }
 
 .pretty-mermaid-toolbar-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 6px;
-  border: none;
-  background: transparent;
-  color: var(--text-muted, #94a3b8);
-  cursor: pointer;
-  padding: 0;
+  --icon-size: 14px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 6px !important;
+  border: none !important;
+  background: transparent !important;
+  color: var(--text-muted, #94a3b8) !important;
+  cursor: pointer !important;
+  padding: 0 !important;
   transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
 }
 
 .pretty-mermaid-toolbar-btn:hover {
-  background: var(--background-modifier-hover, rgba(255, 255, 255, 0.12));
-  color: var(--text-normal, #ffffff);
+  background: var(--background-modifier-hover, rgba(255, 255, 255, 0.15)) !important;
+  color: var(--text-normal, #ffffff) !important;
   transform: scale(1.06);
 }
 
-.pretty-mermaid-toolbar-btn svg {
-  width: 14px;
-  height: 14px;
+.pretty-mermaid-toolbar-btn svg,
+.pretty-mermaid-toolbar-btn .svg-icon {
+  width: 14px !important;
+  height: 14px !important;
+  stroke: currentColor !important;
+  fill: none !important;
+  stroke-width: 2px !important;
   display: inline-block !important;
   margin: 0 !important;
 }
+
 
 .pretty-mermaid-toolbar-sep {
   width: 1px;
