@@ -1,4 +1,4 @@
-import { App, Plugin, PluginSettingTab, Setting, loadMermaid, MarkdownPostProcessorContext } from 'obsidian';
+import { App, Plugin, PluginSettingTab, Setting, loadMermaid, MarkdownPostProcessorContext, Modal, Notice, setIcon } from 'obsidian';
 
 export const AVAILABLE_THEMES = [
 	'adaptive',
@@ -24,6 +24,8 @@ interface PrettyMermaidSettings {
 	theme: MermaidTheme;
 	colorMode: 'auto' | 'light' | 'dark';
 	flowchartCurve: FlowchartCurve;
+	enableToolbar: boolean;
+	enableZoom: boolean;
 	customCss: string;
 }
 
@@ -32,6 +34,8 @@ const DEFAULT_SETTINGS: PrettyMermaidSettings = {
 	theme: 'adaptive',
 	colorMode: 'auto',
 	flowchartCurve: 'natural',
+	enableToolbar: true,
+	enableZoom: true,
 	customCss: ''
 };
 
@@ -262,7 +266,222 @@ export default class PrettyMermaidPlugin extends Plugin {
 		
 		// Apply Mermaid theme variables by injecting CSS
 		this.applyMermaidTheme();
+
+		// Attach interactive toolbar if enabled
+		if (this.settings.enableToolbar) {
+			this.attachToolbar(element, directives);
+		}
 	}
+
+	private attachToolbar(element: HTMLElement, directives: DiagramDirectives) {
+		if (element.querySelector(':scope > .pretty-mermaid-toolbar')) return;
+
+		const svg = element.querySelector('svg');
+		if (!svg) {
+			setTimeout(() => {
+				const retrySvg = element.querySelector('svg');
+				if (retrySvg && !element.querySelector(':scope > .pretty-mermaid-toolbar')) {
+					this.attachToolbar(element, directives);
+				}
+			}, 150);
+			return;
+		}
+
+		element.style.position = 'relative';
+
+		const toolbar = document.createElement('div');
+		toolbar.className = 'pretty-mermaid-toolbar';
+
+		let zoom = 1.0;
+		let panX = 0;
+		let panY = 0;
+		let isPanning = false;
+		let startX = 0;
+		let startY = 0;
+
+		const updateTransform = (withTransition = true) => {
+			svg.style.transition = withTransition ? 'transform 0.15s ease-out' : 'none';
+			svg.style.transformOrigin = 'center center';
+			svg.style.transform = `translate(${panX}px, ${panY}px) scale(${zoom})`;
+		};
+
+		const allowZoom = directives.zoom !== undefined ? directives.zoom : this.settings.enableZoom;
+
+		if (allowZoom) {
+			const zoomInBtn = document.createElement('button');
+			zoomInBtn.className = 'pretty-mermaid-toolbar-btn';
+			zoomInBtn.title = 'Zoom in';
+			setIcon(zoomInBtn, 'zoom-in');
+			zoomInBtn.addEventListener('click', (e) => {
+				e.stopPropagation();
+				zoom = Math.min(zoom * 1.25, 4.0);
+				updateTransform(true);
+			});
+			toolbar.appendChild(zoomInBtn);
+
+			const zoomOutBtn = document.createElement('button');
+			zoomOutBtn.className = 'pretty-mermaid-toolbar-btn';
+			zoomOutBtn.title = 'Zoom out';
+			setIcon(zoomOutBtn, 'zoom-out');
+			zoomOutBtn.addEventListener('click', (e) => {
+				e.stopPropagation();
+				zoom = Math.max(zoom / 1.25, 0.3);
+				updateTransform(true);
+			});
+			toolbar.appendChild(zoomOutBtn);
+
+			const resetBtn = document.createElement('button');
+			resetBtn.className = 'pretty-mermaid-toolbar-btn';
+			resetBtn.title = 'Reset view (100%)';
+			setIcon(resetBtn, 'rotate-ccw');
+			resetBtn.addEventListener('click', (e) => {
+				e.stopPropagation();
+				zoom = 1.0;
+				panX = 0;
+				panY = 0;
+				updateTransform(true);
+			});
+			toolbar.appendChild(resetBtn);
+
+			const sep1 = document.createElement('div');
+			sep1.className = 'pretty-mermaid-toolbar-sep';
+			toolbar.appendChild(sep1);
+
+			element.addEventListener('wheel', (e: WheelEvent) => {
+				if (e.ctrlKey || e.metaKey || directives.zoom) {
+					e.preventDefault();
+					const delta = e.deltaY < 0 ? 1.15 : 0.87;
+					zoom = Math.max(0.3, Math.min(4.0, zoom * delta));
+					updateTransform(false);
+				}
+			}, { passive: false });
+
+			element.addEventListener('mousedown', (e: MouseEvent) => {
+				if (e.button !== 0 || (e.target as HTMLElement).closest('.pretty-mermaid-toolbar')) return;
+				if (zoom > 1.0 || directives.zoom) {
+					isPanning = true;
+					startX = e.clientX - panX;
+					startY = e.clientY - panY;
+					element.style.cursor = 'grabbing';
+				}
+			});
+
+			window.addEventListener('mousemove', (e: MouseEvent) => {
+				if (!isPanning) return;
+				panX = e.clientX - startX;
+				panY = e.clientY - startY;
+				updateTransform(false);
+			});
+
+			window.addEventListener('mouseup', () => {
+				if (isPanning) {
+					isPanning = false;
+					element.style.cursor = '';
+				}
+			});
+		}
+
+		// Copy PNG
+		const copyPngBtn = document.createElement('button');
+		copyPngBtn.className = 'pretty-mermaid-toolbar-btn';
+		copyPngBtn.title = 'Copy diagram as PNG';
+		setIcon(copyPngBtn, 'image');
+		copyPngBtn.addEventListener('click', async (e) => {
+			e.stopPropagation();
+			await this.copyDiagramAsPng(svg as SVGSVGElement);
+		});
+		toolbar.appendChild(copyPngBtn);
+
+		// Copy SVG
+		const copySvgBtn = document.createElement('button');
+		copySvgBtn.className = 'pretty-mermaid-toolbar-btn';
+		copySvgBtn.title = 'Copy SVG markup';
+		setIcon(copySvgBtn, 'copy');
+		copySvgBtn.addEventListener('click', (e) => {
+			e.stopPropagation();
+			this.copyDiagramAsSvg(svg as SVGSVGElement);
+		});
+		toolbar.appendChild(copySvgBtn);
+
+		// Focus / Fullscreen
+		const focusBtn = document.createElement('button');
+		focusBtn.className = 'pretty-mermaid-toolbar-btn';
+		focusBtn.title = 'Fullscreen focus view';
+		setIcon(focusBtn, 'maximize');
+		focusBtn.addEventListener('click', (e) => {
+			e.stopPropagation();
+			new MermaidFocusModal(this.app, svg as SVGSVGElement).open();
+		});
+		toolbar.appendChild(focusBtn);
+
+		element.prepend(toolbar);
+	}
+
+	private async copyDiagramAsPng(svgElement: SVGSVGElement) {
+		try {
+			const svgClone = svgElement.cloneNode(true) as SVGSVGElement;
+			svgClone.style.transform = 'none';
+
+			const bbox = svgElement.getBBox ? svgElement.getBBox() : { width: 800, height: 600 };
+			const width = svgElement.clientWidth || bbox.width || 800;
+			const height = svgElement.clientHeight || bbox.height || 600;
+
+			svgClone.setAttribute('width', `${width}`);
+			svgClone.setAttribute('height', `${height}`);
+
+			const svgData = new XMLSerializer().serializeToString(svgClone);
+			const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+			const URL = window.URL || window.webkitURL || window;
+			const blobURL = URL.createObjectURL(svgBlob);
+
+			const img = new Image();
+			img.onload = () => {
+				const scale = 2;
+				const canvas = document.createElement('canvas');
+				canvas.width = width * scale;
+				canvas.height = height * scale;
+				const ctx = canvas.getContext('2d');
+				if (!ctx) return;
+				ctx.scale(scale, scale);
+				ctx.drawImage(img, 0, 0);
+				URL.revokeObjectURL(blobURL);
+
+				canvas.toBlob(async (blob) => {
+					if (!blob) return;
+					try {
+						await navigator.clipboard.write([
+							new ClipboardItem({ 'image/png': blob })
+						]);
+						new Notice('Diagram copied to clipboard as PNG');
+					} catch (e) {
+						const a = document.createElement('a');
+						a.download = 'mermaid-diagram.png';
+						a.href = canvas.toDataURL('image/png');
+						a.click();
+						new Notice('Diagram downloaded as PNG');
+					}
+				}, 'image/png');
+			};
+			img.src = blobURL;
+		} catch (err) {
+			console.error('Pretty Mermaid: Failed to export diagram as PNG', err);
+			new Notice('Failed to export diagram as PNG');
+		}
+	}
+
+	private copyDiagramAsSvg(svgElement: SVGSVGElement) {
+		try {
+			const svgClone = svgElement.cloneNode(true) as SVGSVGElement;
+			svgClone.style.transform = 'none';
+			const svgData = new XMLSerializer().serializeToString(svgClone);
+			navigator.clipboard.writeText(svgData);
+			new Notice('SVG markup copied to clipboard');
+		} catch (err) {
+			console.error('Pretty Mermaid: Failed to copy SVG', err);
+			new Notice('Failed to copy SVG');
+		}
+	}
+
 
 	public updateModeClasses() {
 		document.querySelectorAll('.pretty-mermaid-enhanced').forEach((el) => {
@@ -993,6 +1212,10 @@ ${selector} {
 		// Remove dynamically created style elements
 		const styleElements = document.querySelectorAll('style[id^="pretty-mermaid-theme-"]');
 		styleElements.forEach((el) => el.remove());
+
+		// Remove floating toolbars
+		const toolbars = document.querySelectorAll('.pretty-mermaid-toolbar');
+		toolbars.forEach((tb) => tb.remove());
 	}
 
 	private refreshAllMermaidDiagrams() {
@@ -1123,6 +1346,26 @@ class PrettyMermaidSettingTab extends PluginSettingTab {
 				}));
 
 		new Setting(containerEl)
+			.setName('Interactive Diagram Toolbar')
+			.setDesc('Display a floating glass toolbar on hover with zoom, copy, and fullscreen actions')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.enableToolbar)
+				.onChange(async (value) => {
+					this.plugin.settings.enableToolbar = value;
+					await this.plugin.saveSettings();
+				}));
+
+		new Setting(containerEl)
+			.setName('Interactive Pan & Zoom')
+			.setDesc('Enable mouse drag to pan and Ctrl/Cmd+scroll to zoom')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.enableZoom)
+				.onChange(async (value) => {
+					this.plugin.settings.enableZoom = value;
+					await this.plugin.saveSettings();
+				}));
+
+		new Setting(containerEl)
 			.setName('Custom CSS')
 			.setDesc('Add custom CSS for additional styling (advanced users)')
 			.addTextArea(text => text
@@ -1133,4 +1376,34 @@ class PrettyMermaidSettingTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 				}));
 	}
-}
+}
+
+class MermaidFocusModal extends Modal {
+	svg: SVGSVGElement;
+
+	constructor(app: App, svg: SVGSVGElement) {
+		super(app);
+		this.svg = svg;
+	}
+
+	onOpen() {
+		const { contentEl, modalEl } = this;
+		modalEl.addClass('pretty-mermaid-focus-modal');
+		contentEl.empty();
+		contentEl.createEl('h3', { text: 'Diagram Focus View', cls: 'pretty-mermaid-focus-title' });
+
+		const wrapper = contentEl.createDiv({ cls: 'pretty-mermaid-focus-content' });
+		const clone = this.svg.cloneNode(true) as SVGSVGElement;
+		clone.style.width = '100%';
+		clone.style.height = '100%';
+		clone.style.maxHeight = '75vh';
+		clone.style.transform = 'none';
+		wrapper.appendChild(clone);
+	}
+
+	onClose() {
+		const { contentEl } = this;
+		contentEl.empty();
+	}
+}
+
