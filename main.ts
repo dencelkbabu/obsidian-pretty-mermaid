@@ -47,6 +47,16 @@ export default class PrettyMermaidPlugin extends Plugin {
 			})
 		);
 
+		// Listen for theme / css changes (light/dark mode toggle)
+		this.registerEvent(
+			this.app.workspace.on('css-change', () => {
+				if (this.settings.enabled) {
+					this.applyMermaidTheme();
+					this.updateModeClasses();
+				}
+			})
+		);
+
 		// Set up DOM mutation observer to catch re-rendered diagrams
 		this.setupMutationObserver();
 
@@ -76,6 +86,16 @@ export default class PrettyMermaidPlugin extends Plugin {
 		this.refreshAllMermaidDiagrams();
 	}
 
+	public isDarkMode(): boolean {
+		if (this.settings.colorMode === 'dark') return true;
+		if (this.settings.colorMode === 'light') return false;
+		return (
+			document.body.classList.contains('theme-dark') ||
+			(!document.body.classList.contains('theme-light') &&
+				window.matchMedia('(prefers-color-scheme: dark)').matches)
+		);
+	}
+
 	private processMermaidDiagrams(element: HTMLElement) {
 		// Find all Mermaid diagrams in the element
 		const mermaidElements = element.querySelectorAll('.mermaid');
@@ -86,22 +106,35 @@ export default class PrettyMermaidPlugin extends Plugin {
 	}
 
 	private enhanceMermaidDiagram(element: HTMLElement) {
-		// Skip if already enhanced to avoid duplicate styling
-		if (element.hasClass('pretty-mermaid-enhanced')) {
-			return;
+		if (!element.hasClass('pretty-mermaid-enhanced')) {
+			element.addClass('pretty-mermaid-enhanced');
 		}
 
-		// Add our custom class for styling
-		element.addClass('pretty-mermaid-enhanced');
-		
-		// Apply theme-specific styling
+		// Clean previous theme / mode classes
+		element.removeClass('pretty-mermaid-classic');
+		element.removeClass('pretty-mermaid-monochrome');
+		element.removeClass('pretty-mermaid-mode-light');
+		element.removeClass('pretty-mermaid-mode-dark');
+		element.removeClass('pretty-mermaid-mode-auto');
+
+		// Apply theme and mode classes
 		element.addClass(`pretty-mermaid-${this.settings.theme}`);
+		element.addClass(`pretty-mermaid-mode-${this.settings.colorMode}`);
 		
 		// Apply Mermaid theme variables by injecting CSS
-		this.applyMermaidTheme(element);
+		this.applyMermaidTheme();
 	}
 
-	private applyMermaidTheme(element: HTMLElement) {
+	public updateModeClasses() {
+		document.querySelectorAll('.pretty-mermaid-enhanced').forEach((el) => {
+			el.removeClass('pretty-mermaid-mode-light');
+			el.removeClass('pretty-mermaid-mode-dark');
+			el.removeClass('pretty-mermaid-mode-auto');
+			el.addClass(`pretty-mermaid-mode-${this.settings.colorMode}`);
+		});
+	}
+
+	private applyMermaidTheme() {
 		// Get the theme variables based on current theme
 		const themeVars = this.getMermaidThemeVariables();
 		
@@ -289,6 +322,9 @@ export default class PrettyMermaidPlugin extends Plugin {
 			el.removeClass('pretty-mermaid-enhanced');
 			el.removeClass('pretty-mermaid-classic');
 			el.removeClass('pretty-mermaid-monochrome');
+			el.removeClass('pretty-mermaid-mode-light');
+			el.removeClass('pretty-mermaid-mode-dark');
+			el.removeClass('pretty-mermaid-mode-auto');
 		});
 		
 		// Remove dynamically created style elements
