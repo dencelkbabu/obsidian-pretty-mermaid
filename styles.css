@@ -113,15 +113,33 @@
 /* DARK MODE — feed #000000 to the inversion filter so it outputs white text */
 body.theme-dark svg[id] .pieTitleText,
 body.theme-dark svg[id] .slice,
-body.theme-dark svg[id] .legend text {
+body.theme-dark svg[id] .legend text,
+body.theme-dark svg[id] .messageText,
+body.theme-dark svg[id] .loopText,
+body.theme-dark svg[id] .labelText,
+body.theme-dark svg[id] .sequenceNumber,
+body.theme-dark .pretty-mermaid-enhanced .messageText,
+body.theme-dark .pretty-mermaid-enhanced .loopText,
+body.theme-dark .pretty-mermaid-enhanced .labelText,
+body.theme-dark .pretty-mermaid-enhanced .sequenceNumber {
   fill: #000000 !important;
+  color: #000000 !important;
 }
 
 /* LIGHT MODE — no inversion, provide dark text directly */
 body.theme-light svg[id] .pieTitleText,
 body.theme-light svg[id] .slice,
-body.theme-light svg[id] .legend text {
+body.theme-light svg[id] .legend text,
+body.theme-light svg[id] .messageText,
+body.theme-light svg[id] .loopText,
+body.theme-light svg[id] .labelText,
+body.theme-light svg[id] .sequenceNumber,
+body.theme-light .pretty-mermaid-enhanced .messageText,
+body.theme-light .pretty-mermaid-enhanced .loopText,
+body.theme-light .pretty-mermaid-enhanced .labelText,
+body.theme-light .pretty-mermaid-enhanced .sequenceNumber {
   fill: #1e293b !important;
+  color: #1e293b !important;
 }
 
 /* Node Geometry & Modern Corner Radii */
