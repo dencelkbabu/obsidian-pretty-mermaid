@@ -23,6 +23,8 @@ Attempting to fix dark mode text visibility by setting `fill: #ffffff` or `fill:
 | `.loopText` | Sequence Diagram | Header text for `loop`, `alt`, and `opt` blocks |
 | `.labelText` | Sequence Diagram | Text inside sequence label boxes |
 | `.sequenceNumber` | Sequence Diagram | Numbers inside step sequence circles (`1`, `2`, `3`...) |
+| `.noteText` | Sequence Diagram | Text inside sequence note boxes (`Note over X...`) |
+| `rect.note` / `.note` | Sequence Diagram | Note box background card & border |
 | `.chart-title text` | XYChart (`xychart-beta`) | Main chart title |
 | `.bottom-axis text` | XYChart (`xychart-beta`) | X-axis title and tick number labels |
 | `.left-axis text` | XYChart (`xychart-beta`) | Y-axis title and tick number labels |

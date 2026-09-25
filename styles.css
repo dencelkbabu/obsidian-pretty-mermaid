@@ -118,6 +118,8 @@ body.theme-dark svg[id] .messageText,
 body.theme-dark svg[id] .loopText,
 body.theme-dark svg[id] .labelText,
 body.theme-dark svg[id] .sequenceNumber,
+body.theme-dark svg[id] .noteText,
+body.theme-dark svg[id] .noteText tspan,
 body.theme-dark svg[id] .chart-title text,
 body.theme-dark svg[id] .bottom-axis text,
 body.theme-dark svg[id] .left-axis text,
@@ -127,6 +129,8 @@ body.theme-dark .pretty-mermaid-enhanced .messageText,
 body.theme-dark .pretty-mermaid-enhanced .loopText,
 body.theme-dark .pretty-mermaid-enhanced .labelText,
 body.theme-dark .pretty-mermaid-enhanced .sequenceNumber,
+body.theme-dark .pretty-mermaid-enhanced .noteText,
+body.theme-dark .pretty-mermaid-enhanced .noteText tspan,
 body.theme-dark .pretty-mermaid-enhanced .chart-title text,
 body.theme-dark .pretty-mermaid-enhanced .bottom-axis text,
 body.theme-dark .pretty-mermaid-enhanced .left-axis text,
@@ -134,6 +138,16 @@ body.theme-dark .pretty-mermaid-enhanced .right-axis text,
 body.theme-dark .pretty-mermaid-enhanced .top-axis text {
   fill: #000000 !important;
   color: #000000 !important;
+}
+
+body.theme-dark svg[id] rect.note,
+body.theme-dark svg[id] .note,
+body.theme-dark .pretty-mermaid-enhanced rect.note,
+body.theme-dark .pretty-mermaid-enhanced .note {
+  fill: #ffffff !important;
+  stroke: #94a3b8 !important;
+  rx: 6px !important;
+  ry: 6px !important;
 }
 
 body.theme-dark svg[id] .bottom-axis path,
@@ -171,6 +185,24 @@ body.theme-light .pretty-mermaid-enhanced .right-axis text,
 body.theme-light .pretty-mermaid-enhanced .top-axis text {
   fill: #1e293b !important;
   color: #1e293b !important;
+}
+
+body.theme-light svg[id] .noteText,
+body.theme-light svg[id] .noteText tspan,
+body.theme-light .pretty-mermaid-enhanced .noteText,
+body.theme-light .pretty-mermaid-enhanced .noteText tspan {
+  fill: #713f12 !important;
+  color: #713f12 !important;
+}
+
+body.theme-light svg[id] rect.note,
+body.theme-light svg[id] .note,
+body.theme-light .pretty-mermaid-enhanced rect.note,
+body.theme-light .pretty-mermaid-enhanced .note {
+  fill: #fef08a !important;
+  stroke: #eab308 !important;
+  rx: 6px !important;
+  ry: 6px !important;
 }
 
 body.theme-light svg[id] .bottom-axis path,
