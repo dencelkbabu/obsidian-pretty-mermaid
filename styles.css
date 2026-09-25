@@ -109,40 +109,29 @@
    ========================================================================== */
 
 /* Title */
-.mermaid .pieTitleText,
-.pretty-mermaid-enhanced .pieTitleText,
-.pretty-mermaid-enhanced text.pieTitleText {
+body .mermaid svg .pieTitleText,
+body .pretty-mermaid-enhanced svg .pieTitleText {
   fill: var(--text-normal) !important;
   color: var(--text-normal) !important;
-  stroke: none !important;
-  opacity: 1 !important;
   font-weight: 600 !important;
 }
 
 /* Legend labels */
-.mermaid .legend text,
-.mermaid text.legend-text,
-.pretty-mermaid-enhanced .legend text,
-.pretty-mermaid-enhanced g.legend text {
+body .mermaid svg .legend text,
+body .pretty-mermaid-enhanced svg .legend text {
   fill: var(--text-normal) !important;
   color: var(--text-normal) !important;
-  stroke: none !important;
-  opacity: 1 !important;
 }
 
-/* Slice percentage labels — always white for contrast on coloured slices */
-.mermaid text.slice,
-.mermaid .pieCircleText,
-.pretty-mermaid-enhanced text.slice,
-.pretty-mermaid-enhanced text.pieCircleText,
-.pretty-mermaid-enhanced .slice text,
-.pretty-mermaid-enhanced g.slices text {
-  fill: #ffffff !important;
-  color: #ffffff !important;
+/* Slice percentages — dynamically adapts to light/dark slices */
+body .mermaid svg text.slice,
+body .pretty-mermaid-enhanced svg g.slices text {
+  fill: var(--text-normal) !important;
+  color: var(--text-normal) !important;
   font-weight: 600 !important;
-  stroke: none !important;
-  opacity: 1 !important;
 }
+
+
 
 
 /* Node Geometry & Modern Corner Radii */
