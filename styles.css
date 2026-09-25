@@ -105,33 +105,31 @@
 }
 
 /* ==========================================================================
-   Pie Chart — use Obsidian's own --text-normal so color adapts to any theme
+   Pie Chart — explicit dark/light theme rules (var(--text-normal) fails to
+   resolve inside SVG in dark mode, so we hardcode high-contrast values)
    ========================================================================== */
 
-/* Title */
-body .mermaid svg .pieTitleText,
-body .pretty-mermaid-enhanced svg .pieTitleText {
-  fill: var(--text-normal) !important;
-  color: var(--text-normal) !important;
-  font-weight: 600 !important;
+/* DARK MODE */
+.theme-dark .mermaid svg .pieTitleText,
+.theme-dark .pretty-mermaid-enhanced svg .pieTitleText,
+.theme-dark .mermaid svg .legend text,
+.theme-dark .pretty-mermaid-enhanced svg .legend text,
+.theme-dark .mermaid svg text.slice,
+.theme-dark .pretty-mermaid-enhanced svg g.slices text {
+  fill: #e5e5e5 !important;
+  color: #e5e5e5 !important;
 }
 
-/* Legend labels */
-body .mermaid svg .legend text,
-body .pretty-mermaid-enhanced svg .legend text {
-  fill: var(--text-normal) !important;
-  color: var(--text-normal) !important;
+/* LIGHT MODE */
+.theme-light .mermaid svg .pieTitleText,
+.theme-light .pretty-mermaid-enhanced svg .pieTitleText,
+.theme-light .mermaid svg .legend text,
+.theme-light .pretty-mermaid-enhanced svg .legend text,
+.theme-light .mermaid svg text.slice,
+.theme-light .pretty-mermaid-enhanced svg g.slices text {
+  fill: #222222 !important;
+  color: #222222 !important;
 }
-
-/* Slice percentages — dynamically adapts to light/dark slices */
-body .mermaid svg text.slice,
-body .pretty-mermaid-enhanced svg g.slices text {
-  fill: var(--text-normal) !important;
-  color: var(--text-normal) !important;
-  font-weight: 600 !important;
-}
-
-
 
 
 /* Node Geometry & Modern Corner Radii */
