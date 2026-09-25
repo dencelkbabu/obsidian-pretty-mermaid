@@ -104,6 +104,47 @@
   filter: none !important;
 }
 
+/* ==========================================================================
+   Pie Chart — use Obsidian's own --text-normal so color adapts to any theme
+   ========================================================================== */
+
+/* Title */
+.mermaid .pieTitleText,
+.pretty-mermaid-enhanced .pieTitleText,
+.pretty-mermaid-enhanced text.pieTitleText {
+  fill: var(--text-normal) !important;
+  color: var(--text-normal) !important;
+  stroke: none !important;
+  opacity: 1 !important;
+  font-weight: 600 !important;
+}
+
+/* Legend labels */
+.mermaid .legend text,
+.mermaid text.legend-text,
+.pretty-mermaid-enhanced .legend text,
+.pretty-mermaid-enhanced g.legend text {
+  fill: var(--text-normal) !important;
+  color: var(--text-normal) !important;
+  stroke: none !important;
+  opacity: 1 !important;
+}
+
+/* Slice percentage labels — always white for contrast on coloured slices */
+.mermaid text.slice,
+.mermaid .pieCircleText,
+.pretty-mermaid-enhanced text.slice,
+.pretty-mermaid-enhanced text.pieCircleText,
+.pretty-mermaid-enhanced .slice text,
+.pretty-mermaid-enhanced g.slices text {
+  fill: #ffffff !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  stroke: none !important;
+  opacity: 1 !important;
+}
+
+
 /* Node Geometry & Modern Corner Radii */
 .pretty-mermaid-enhanced .node rect,
 .pretty-mermaid-enhanced .node polygon,
