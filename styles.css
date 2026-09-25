@@ -141,8 +141,10 @@ body.theme-light svg[id] .legend text {
   ry: 10px !important;
 }
 
-/* Prevent SVG foreignObject node text clipping & vertically center content */
-.pretty-mermaid-enhanced .node foreignObject {
+/* Prevent SVG foreignObject clipping & vertically center content */
+.pretty-mermaid-enhanced foreignObject,
+.pretty-mermaid-enhanced .node foreignObject,
+.pretty-mermaid-enhanced .edgeLabel foreignObject {
   overflow: visible !important;
 }
 
@@ -180,9 +182,19 @@ body.theme-light svg[id] .legend text {
 .pretty-mermaid-enhanced .edgeLabel g,
 .pretty-mermaid-enhanced .edgeLabel .label,
 .pretty-mermaid-enhanced .edgeLabel foreignObject,
-.pretty-mermaid-enhanced .edgeLabel foreignObject>div {
+.pretty-mermaid-enhanced .edgeLabel foreignObject>div,
+.pretty-mermaid-enhanced .edgeLabel .labelBkg {
   background: transparent !important;
   background-color: transparent !important;
+  overflow: visible !important;
+}
+
+.pretty-mermaid-enhanced .edgeLabel foreignObject>div {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: auto !important;
+  height: auto !important;
 }
 
 .pretty-mermaid-enhanced g.edgeLabels rect,
@@ -211,6 +223,12 @@ body.theme-light svg[id] .legend text {
   display: inline-block !important;
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
+}
+
+.pretty-mermaid-enhanced .edgeLabel p {
+  margin: 0 !important;
+  padding: 0 !important;
+  display: inline-block !important;
 }
 
 .pretty-mermaid-enhanced .edgeLabel text,
