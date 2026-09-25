@@ -118,12 +118,33 @@ body.theme-dark svg[id] .messageText,
 body.theme-dark svg[id] .loopText,
 body.theme-dark svg[id] .labelText,
 body.theme-dark svg[id] .sequenceNumber,
+body.theme-dark svg[id] .chart-title text,
+body.theme-dark svg[id] .bottom-axis text,
+body.theme-dark svg[id] .left-axis text,
+body.theme-dark svg[id] .right-axis text,
+body.theme-dark svg[id] .top-axis text,
 body.theme-dark .pretty-mermaid-enhanced .messageText,
 body.theme-dark .pretty-mermaid-enhanced .loopText,
 body.theme-dark .pretty-mermaid-enhanced .labelText,
-body.theme-dark .pretty-mermaid-enhanced .sequenceNumber {
+body.theme-dark .pretty-mermaid-enhanced .sequenceNumber,
+body.theme-dark .pretty-mermaid-enhanced .chart-title text,
+body.theme-dark .pretty-mermaid-enhanced .bottom-axis text,
+body.theme-dark .pretty-mermaid-enhanced .left-axis text,
+body.theme-dark .pretty-mermaid-enhanced .right-axis text,
+body.theme-dark .pretty-mermaid-enhanced .top-axis text {
   fill: #000000 !important;
   color: #000000 !important;
+}
+
+body.theme-dark svg[id] .bottom-axis path,
+body.theme-dark svg[id] .left-axis path,
+body.theme-dark svg[id] .right-axis path,
+body.theme-dark svg[id] .top-axis path,
+body.theme-dark .pretty-mermaid-enhanced .bottom-axis path,
+body.theme-dark .pretty-mermaid-enhanced .left-axis path,
+body.theme-dark .pretty-mermaid-enhanced .right-axis path,
+body.theme-dark .pretty-mermaid-enhanced .top-axis path {
+  stroke: #000000 !important;
 }
 
 /* LIGHT MODE — no inversion, provide dark text directly */
@@ -134,12 +155,39 @@ body.theme-light svg[id] .messageText,
 body.theme-light svg[id] .loopText,
 body.theme-light svg[id] .labelText,
 body.theme-light svg[id] .sequenceNumber,
+body.theme-light svg[id] .chart-title text,
+body.theme-light svg[id] .bottom-axis text,
+body.theme-light svg[id] .left-axis text,
+body.theme-light svg[id] .right-axis text,
+body.theme-light svg[id] .top-axis text,
 body.theme-light .pretty-mermaid-enhanced .messageText,
 body.theme-light .pretty-mermaid-enhanced .loopText,
 body.theme-light .pretty-mermaid-enhanced .labelText,
-body.theme-light .pretty-mermaid-enhanced .sequenceNumber {
+body.theme-light .pretty-mermaid-enhanced .sequenceNumber,
+body.theme-light .pretty-mermaid-enhanced .chart-title text,
+body.theme-light .pretty-mermaid-enhanced .bottom-axis text,
+body.theme-light .pretty-mermaid-enhanced .left-axis text,
+body.theme-light .pretty-mermaid-enhanced .right-axis text,
+body.theme-light .pretty-mermaid-enhanced .top-axis text {
   fill: #1e293b !important;
   color: #1e293b !important;
+}
+
+body.theme-light svg[id] .bottom-axis path,
+body.theme-light svg[id] .left-axis path,
+body.theme-light svg[id] .right-axis path,
+body.theme-light svg[id] .top-axis path,
+body.theme-light .pretty-mermaid-enhanced .bottom-axis path,
+body.theme-light .pretty-mermaid-enhanced .left-axis path,
+body.theme-light .pretty-mermaid-enhanced .right-axis path,
+body.theme-light .pretty-mermaid-enhanced .top-axis path {
+  stroke: #64748b !important;
+}
+
+.pretty-mermaid-enhanced rect.background,
+.pretty-mermaid-enhanced g.main rect.background {
+  fill: transparent !important;
+  opacity: 0 !important;
 }
 
 /* Node Geometry & Modern Corner Radii */
