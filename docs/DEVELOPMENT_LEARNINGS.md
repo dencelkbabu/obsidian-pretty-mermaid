@@ -30,6 +30,9 @@ Attempting to fix dark mode text visibility by setting `fill: #ffffff` or `fill:
 | `.left-axis text` | XYChart (`xychart-beta`) | Y-axis title and tick number labels |
 | `.right-axis text` / `.top-axis text` | XYChart (`xychart-beta`) | Secondary axes titles & tick labels |
 | `.bottom-axis path` / `.left-axis path` | XYChart (`xychart-beta`) | Axis lines & tick stroke lines |
+| `svg > text` / `text[font-size]` | Timeline Diagram | Main timeline title text |
+| `.timeline-node text` / `[class*="section-"] text` | Timeline Diagram | Text inside timeline event/task cards |
+| `.lineWrapper line` | Timeline Diagram | Main horizontal timeline axis & vertical dashed connectors |
 
 ### Working Solution
 

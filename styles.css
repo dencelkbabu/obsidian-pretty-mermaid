@@ -125,6 +125,14 @@ body.theme-dark svg[id] .bottom-axis text,
 body.theme-dark svg[id] .left-axis text,
 body.theme-dark svg[id] .right-axis text,
 body.theme-dark svg[id] .top-axis text,
+body.theme-dark svg[id] > text,
+body.theme-dark svg[id] text[font-size],
+body.theme-dark svg[id] .timeline-node text,
+body.theme-dark svg[id] .timeline-node tspan,
+body.theme-dark svg[id] [class*="section-"] text,
+body.theme-dark svg[id] [class*="section-"] tspan,
+body.theme-dark svg[id] .taskWrapper text,
+body.theme-dark svg[id] .eventWrapper text,
 body.theme-dark .pretty-mermaid-enhanced .messageText,
 body.theme-dark .pretty-mermaid-enhanced .loopText,
 body.theme-dark .pretty-mermaid-enhanced .labelText,
@@ -135,7 +143,15 @@ body.theme-dark .pretty-mermaid-enhanced .chart-title text,
 body.theme-dark .pretty-mermaid-enhanced .bottom-axis text,
 body.theme-dark .pretty-mermaid-enhanced .left-axis text,
 body.theme-dark .pretty-mermaid-enhanced .right-axis text,
-body.theme-dark .pretty-mermaid-enhanced .top-axis text {
+body.theme-dark .pretty-mermaid-enhanced .top-axis text,
+body.theme-dark .pretty-mermaid-enhanced > svg > text,
+body.theme-dark .pretty-mermaid-enhanced text[font-size],
+body.theme-dark .pretty-mermaid-enhanced .timeline-node text,
+body.theme-dark .pretty-mermaid-enhanced .timeline-node tspan,
+body.theme-dark .pretty-mermaid-enhanced [class*="section-"] text,
+body.theme-dark .pretty-mermaid-enhanced [class*="section-"] tspan,
+body.theme-dark .pretty-mermaid-enhanced .taskWrapper text,
+body.theme-dark .pretty-mermaid-enhanced .eventWrapper text {
   fill: #000000 !important;
   color: #000000 !important;
 }
@@ -154,10 +170,12 @@ body.theme-dark svg[id] .bottom-axis path,
 body.theme-dark svg[id] .left-axis path,
 body.theme-dark svg[id] .right-axis path,
 body.theme-dark svg[id] .top-axis path,
+body.theme-dark svg[id] .lineWrapper line,
 body.theme-dark .pretty-mermaid-enhanced .bottom-axis path,
 body.theme-dark .pretty-mermaid-enhanced .left-axis path,
 body.theme-dark .pretty-mermaid-enhanced .right-axis path,
-body.theme-dark .pretty-mermaid-enhanced .top-axis path {
+body.theme-dark .pretty-mermaid-enhanced .top-axis path,
+body.theme-dark .pretty-mermaid-enhanced .lineWrapper line {
   stroke: #000000 !important;
 }
 
@@ -174,6 +192,8 @@ body.theme-light svg[id] .bottom-axis text,
 body.theme-light svg[id] .left-axis text,
 body.theme-light svg[id] .right-axis text,
 body.theme-light svg[id] .top-axis text,
+body.theme-light svg[id] > text,
+body.theme-light svg[id] text[font-size],
 body.theme-light .pretty-mermaid-enhanced .messageText,
 body.theme-light .pretty-mermaid-enhanced .loopText,
 body.theme-light .pretty-mermaid-enhanced .labelText,
@@ -182,9 +202,27 @@ body.theme-light .pretty-mermaid-enhanced .chart-title text,
 body.theme-light .pretty-mermaid-enhanced .bottom-axis text,
 body.theme-light .pretty-mermaid-enhanced .left-axis text,
 body.theme-light .pretty-mermaid-enhanced .right-axis text,
-body.theme-light .pretty-mermaid-enhanced .top-axis text {
+body.theme-light .pretty-mermaid-enhanced .top-axis text,
+body.theme-light .pretty-mermaid-enhanced > svg > text,
+body.theme-light .pretty-mermaid-enhanced text[font-size] {
   fill: #1e293b !important;
   color: #1e293b !important;
+}
+
+body.theme-light svg[id] .timeline-node text,
+body.theme-light svg[id] .timeline-node tspan,
+body.theme-light svg[id] [class*="section-"] text,
+body.theme-light svg[id] [class*="section-"] tspan,
+body.theme-light svg[id] .taskWrapper text,
+body.theme-light svg[id] .eventWrapper text,
+body.theme-light .pretty-mermaid-enhanced .timeline-node text,
+body.theme-light .pretty-mermaid-enhanced .timeline-node tspan,
+body.theme-light .pretty-mermaid-enhanced [class*="section-"] text,
+body.theme-light .pretty-mermaid-enhanced [class*="section-"] tspan,
+body.theme-light .pretty-mermaid-enhanced .taskWrapper text,
+body.theme-light .pretty-mermaid-enhanced .eventWrapper text {
+  fill: #ffffff !important;
+  color: #ffffff !important;
 }
 
 body.theme-light svg[id] .noteText,
@@ -209,10 +247,12 @@ body.theme-light svg[id] .bottom-axis path,
 body.theme-light svg[id] .left-axis path,
 body.theme-light svg[id] .right-axis path,
 body.theme-light svg[id] .top-axis path,
+body.theme-light svg[id] .lineWrapper line,
 body.theme-light .pretty-mermaid-enhanced .bottom-axis path,
 body.theme-light .pretty-mermaid-enhanced .left-axis path,
 body.theme-light .pretty-mermaid-enhanced .right-axis path,
-body.theme-light .pretty-mermaid-enhanced .top-axis path {
+body.theme-light .pretty-mermaid-enhanced .top-axis path,
+body.theme-light .pretty-mermaid-enhanced .lineWrapper line {
   stroke: #64748b !important;
 }
 
